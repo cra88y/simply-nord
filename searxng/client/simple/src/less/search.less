@@ -50,6 +50,10 @@
     div.category_name {
       margin: auto 0;
     }
+    &:active {
+      background-color: rgba(0, 0, 0, 0.05);
+      transition: 0s;
+    }
   }
 
   input[type="checkbox"]:checked + label {
@@ -74,12 +78,17 @@ button.category_button {
     padding-right: 0.2rem;
   }
 
-  &.selected,
-  &:active {
+  &.selected {
     color: var(--color-categories-item-selected-font);
     border-bottom: 2px solid var(--color-categories-item-border-selected);
   }
-}
+
+  &:active {
+    color: var(--color-categories-item-selected-font);
+    border-bottom: 2px solid var(--color-categories-item-border-selected);
+    background-color: rgba(0, 0, 0, 0.05);
+    transition: 0s;
+  }
 
 // only used when JavaScript is disabled
 .no-js
