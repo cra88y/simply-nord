@@ -150,7 +150,6 @@ button.category_button {
 
 .search_box {
   border-radius: 50px;
-  overflow: hidden;
   width: 100%;
   max-width: @search-width;
   display: inline-flex;
@@ -203,7 +202,7 @@ html.no-js #clear_search.hide_if_nojs {
   width: 100%;
   .ltr-padding-left(1rem);
   .ltr-padding-right(0) !important;
-  border-radius: 0;
+  border-top-left-radius: 50px;
 }
 
 #q::-ms-clear,
@@ -212,9 +211,9 @@ html.no-js #clear_search.hide_if_nojs {
 }
 
 #send_search {
-  padding-right: 1.5rem; // Added
-  .ltr-rounded-right-corners(0px); // Was 0.8rem
-
+  padding-right: 1.5rem; 
+  .ltr-rounded-right-corners(0px);
+  border-top-right-radius: 50px;
   &:hover {
     cursor: pointer;
     background-color: var(--color-search-background-hover);
