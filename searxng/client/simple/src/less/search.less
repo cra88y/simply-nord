@@ -83,12 +83,14 @@ button.category_button {
     border-bottom: 2px solid var(--color-categories-item-border-selected);
   }
 
+  /* This is the state the INSTANT you touch it */
   &:active {
     color: var(--color-categories-item-selected-font);
     border-bottom: 2px solid var(--color-categories-item-border-selected);
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05); 
     transition: 0s;
   }
+}
 
 // only used when JavaScript is disabled
 .no-js
