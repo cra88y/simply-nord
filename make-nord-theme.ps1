@@ -2,7 +2,7 @@
 # Generates complete, deployable theme files from Vanilla + Overrides
 
 param(
-    [string]$VanillaPath = "c:\Users\cra88y\.gemini\searxng-vanilla",
+    [string]$VanillaPath = "$PSScriptRoot\searxng-vanilla",
     [string]$RepoPath = "c:\Users\cra88y\Dev\Repos\simply-nord",
     [string]$OutputPath = "c:\Users\cra88y\Dev\Repos\simply-nord\out"
 )
@@ -28,7 +28,10 @@ Get-ChildItem -Path $VanillaPath | ForEach-Object {
 Write-Host "2. Injecting Nord & Crab LESS overrides..." -ForegroundColor Cyan
 $LessDest = Join-Path $TempBuild "client\simple\src\less"
 Copy-Item (Join-Path $RepoPath "nord-crab-overrides.less") $LessDest -Force
+
+# Inject into definitions (for variables) and style (to win the cascade)
 Add-Content (Join-Path $LessDest "definitions.less") "`n@import `"nord-crab-overrides.less`";"
+Add-Content (Join-Path $LessDest "style.less") "`n@import `"nord-crab-overrides.less`";"
 
 # 4. Apply Template Overrides (Repo CrabX -> Vanilla Templates)
 Write-Host "3. Merging templates (Repo crabx -> Vanilla templates)..." -ForegroundColor Green

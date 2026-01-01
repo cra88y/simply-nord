@@ -193,4 +193,9 @@ cython_debug/
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
-.cursorindexingignore
+# Simply-Nord Build & Theme Artifacts
+searxng-vanilla/
+out/
+node_modules/
+.gemini/
+build_error.log

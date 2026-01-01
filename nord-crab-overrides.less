@@ -1,7 +1,7 @@
 /*
 * Simply-Nord: The Master Override File
 * 
-* This file consolidates ALL theme customizations:
+* This file consolidates ALL theme customizations from the legacy backup:
 * 1. Nord Color Palette
 * 2. Layout & Responsive Structural Overrides
 * 3. Functional UI (Autocomplete, Search, Settings)
@@ -30,9 +30,10 @@
 
 /* --- 2. Base Structural Overrides --- */
 html {
-    line-height: 1.25;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizelegibility;
+    line-height: 1.25 !important;
+    -webkit-font-smoothing: antialiased !important;
+    text-rendering: optimizelegibility !important;
+    cursor: default;
 }
 
 .sxng-icon-set-small {
@@ -45,17 +46,25 @@ html {
     padding-top: 1rem !important;
     gap: 0.5rem !important;
     border-bottom: none !important;
+    background: var(--color-header-background) !important;
 }
 
 .search_box {
     border-radius: 50px !important;
     max-width: @search-width !important;
+    border: none !important;
+    /* Remove borders */
+    box-shadow: var(--color-search-shadow) !important;
 }
 
 #q,
 #send_search {
     padding: 0.8rem 1rem !important;
     font-size: 1.125rem !important;
+    background: var(--color-search-background) !important;
+    color: var(--color-search-font) !important;
+    border: none !important;
+    cursor: text;
 }
 
 #q {
@@ -71,10 +80,30 @@ html {
     border-top-right-radius: 50px !important;
     border-bottom-right-radius: 50px !important;
     padding-right: 1.5rem !important;
+    cursor: pointer !important;
+
+    &:hover {
+        background-color: var(--color-search-background-hover) !important;
+        color: var(--color-search-background) !important;
+    }
 }
 
 #clear_search {
     width: 2rem !important;
+    border-radius: 0 !important;
+    background: var(--color-search-background) !important;
+    border: none !important;
+    cursor: pointer !important;
+
+    &:hover {
+        color: var(--color-search-background-hover) !important;
+    }
+}
+
+/* Ensure bottom corners stay rounded even on mobile focus */
+#search_view:focus-within .search_box,
+#search_view:focus-within .search_box * {
+    border-radius: 50px !important;
 }
 
 /* --- 4. Category Navigation --- */
@@ -83,6 +112,7 @@ button.category_button {
     font-size: 1rem !important;
     padding: 0.25rem 1rem 0.5rem 0.75rem !important;
     border-bottom: 2px solid transparent !important;
+    cursor: pointer !important;
 
     &.selected,
     &:active {
@@ -95,35 +125,90 @@ button.category_button {
 
 .search_filters {
     margin-top: 0 !important;
+    margin-bottom: 0 !important;
     margin-left: (@results-offset + 0.25rem) !important;
-    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    overflow-x: auto !important;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
         display: none;
+    }
+
+    select {
+        padding: 0.25rem 0.5rem !important;
+        background-color: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
     }
 }
 
 /* --- 5. Result Layouts & Typography --- */
 #results {
     margin-top: 0.125rem !important;
+    margin-left: @results-offset !important;
+    gap: 0 @results-gap !important;
+    display: grid !important;
+    grid-template:
+        "header sidebar" min-content
+        "corrections sidebar" min-content
+        "answers sidebar" min-content
+        "urls sidebar" 1fr
+        "pagination sidebar" min-content
+        / @results-width @results-sidebar-width !important;
+}
+
+#results-header {
+    grid-area: header;
+}
+
+#urls {
+    grid-area: urls;
+    padding: 0 !important;
+}
+
+#sidebar {
+    grid-area: sidebar;
+}
+
+#corrections {
+    grid-area: corrections;
+}
+
+#answers {
+    grid-area: answers;
+}
+
+#pagination {
+    grid-area: pagination;
 }
 
 .result {
     padding: 0.5rem 1rem !important;
     max-width: 100% !important;
+    border: none !important;
+    background: var(--color-result-background) !important;
 
     h3 {
         font-size: 1.125rem !important;
         margin: 0.125rem 0 0 0 !important;
 
-        a:visited {
-            color: var(--color-result-link-visited-font) !important;
+        a {
+            color: var(--color-result-link-font) !important;
+            cursor: pointer !important;
+
+            &:visited {
+                color: var(--color-result-link-visited-font) !important;
+            }
         }
     }
 
-    .url_wrapper {
-        font-size: 0.9rem !important;
+    .content,
+    .stat {
+        font-size: 0.9em !important;
+        line-height: 1.25 !important;
+        display: inline !important;
+        /* Matches backup */
     }
 
     img.thumbnail {
@@ -131,8 +216,23 @@ button.category_button {
         border-radius: 25px !important;
         box-shadow: var(--color-search-shadow) !important;
         max-width: 45% !important;
+        max-height: 10rem !important;
         height: auto !important;
         object-fit: contain !important;
+        border: none !important;
+    }
+
+    .altlink a {
+        border-radius: 50px !important;
+        padding: 0.25rem 0.5rem !important;
+        cursor: pointer !important;
+        background: var(--color-show-btn-background) !important;
+        color: var(--color-show-btn-font) !important;
+
+        &:hover {
+            background: var(--color-btn-background) !important;
+            color: var(--color-btn-font) !important;
+        }
     }
 }
 
@@ -141,6 +241,7 @@ button.category_button {
     text-align: end !important;
     font-size: 0.8rem !important;
     width: 100% !important;
+    color: var(--color-result-engines-font) !important;
 }
 
 /* --- 6. Special Result Types --- */
@@ -148,33 +249,118 @@ button.category_button {
     border-radius: 25px !important;
     padding: 0.25rem !important;
     height: @results-image-row-height !important;
+    border: none !important;
 
     img {
         border-radius: 25px !important;
         object-fit: contain !important;
+        height: @results-image-row-height !important;
+        width: auto !important;
+        border: none !important;
     }
 }
 
+.result-videos img.thumbnail {
+    border-radius: 25px !important;
+    border: none !important;
+}
+
 article[data-vim-selected] {
-    .rounded-corners(25px) !important;
+    border-radius: 25px !important;
+    background: var(--color-result-vim-selected) !important;
 }
 
 /* --- 7. Sidebar & Answers --- */
 #answers,
 #sidebar .infobox {
-    .rounded-corners(25px) !important;
+    border-radius: 25px !important;
     background: var(--color-header-background) !important;
     padding: 1.5rem !important;
     border: none !important;
+    box-shadow: none !important;
 }
 
-#suggestions .wrapper form {
-    border-radius: 50px !important;
-    border: 0.125rem solid #0002 !important;
-    padding: 0.125rem 0.5rem !important;
+#sidebar .infobox img {
+    border-radius: 25px !important;
+    border: none !important;
 }
 
-/* --- 8. Home Page (Index) Customizations --- */
+/* Remove bullets and weird spacing from infobox and suggestions */
+#suggestions,
+#infoboxes {
+
+    ul,
+    ol {
+        padding: 0 1rem !important;
+        list-style: none !important;
+        margin: 0 !important;
+    }
+
+    li {
+        list-style: none !important;
+        padding: 0.25rem 0 !important;
+        margin: 0 !important;
+    }
+
+    .infobox .url {
+        list-style: none !important;
+    }
+}
+
+/* --- 8. Suggestions & Related Searches --- */
+#suggestions {
+    display: flex !important;
+    padding: 0.5rem 0 !important;
+    grid-area: header;
+    /* Ensure it stays in the header area */
+
+    .wrapper {
+        display: flex !important;
+        width: 100% !important;
+        text-align: left !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 0.5rem 0 !important;
+
+        &::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        form {
+            display: inline-block !important;
+            border-radius: 50px !important;
+            border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
+            background: var(--color-header-background) !important;
+            padding: 0.25rem 0.75rem !important;
+            margin: 0.25rem !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+
+            &:hover {
+                background: var(--color-btn-background) !important;
+                border-color: var(--color-btn-background) !important;
+
+                input {
+                    color: var(--color-btn-font) !important;
+                }
+            }
+
+            input[type="submit"] {
+                color: @nord10 !important;
+                background: transparent !important;
+                border: none !important;
+                font-size: 0.9rem !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                text-transform: lowercase !important;
+            }
+        }
+    }
+}
+
+/* --- 9. Home Page (Index) Customizations --- */
 #main_index {
     margin-top: 33vh !important;
 }
@@ -183,27 +369,35 @@ article[data-vim-selected] {
     background: var(--color-header-background) !important;
 }
 
-/* --- 9. Autocomplete Functional Overrides --- */
+/* --- 10. Autocomplete Functional Overrides --- */
 .autocomplete {
     min-width: @search-width !important;
     border-radius: 0 !important;
+    border: none !important;
+    box-shadow: var(--color-autocomplete-shadow) !important;
+    background-color: var(--color-autocomplete-background) !important;
 
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: var(--color-header-background) !important;
+    &:empty {
+        display: none !important;
     }
 
     >ul>li {
         padding: 1rem !important;
+        cursor: pointer !important;
+
+        &:hover {
+            background-color: var(--color-autocomplete-background-hover) !important;
+        }
     }
 
     &.open {
-        display: none; // Managed by focus-within below
+        display: block !important;
+        /* Force visible when open class is present */
         max-height: 100dvh !important;
         border-radius: 0 0 25px 25px !important;
         margin-top: 3.5rem !important;
         z-index: 5000;
+        overflow-y: auto !important;
     }
 }
 
@@ -211,22 +405,14 @@ article[data-vim-selected] {
     display: block !important;
 }
 
-/* --- 10. Toolkit UI Overrides --- */
-select {
-    padding: 0.25rem 0.5rem !important;
-    background-size: 1.5rem !important;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
+/* --- 11. Toolkit UI & Visual Removals --- */
+select,
 input[type="checkbox"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
 
-/* --- 11. Visual Removals --- */
 footer,
 .link_on_top_about,
 .link_on_top_donate,
@@ -239,10 +425,34 @@ footer,
     display: none !important;
 }
 
-/* --- 12. Responsive & Mobile --- */
+/* --- 12. Navigation & Pagination --- */
+#backToTop {
+    border-radius: 50px !important;
+    background: var(--color-header-background) !important;
+    border: none !important;
+    bottom: 8rem !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s;
+
+    a {
+        cursor: pointer !important;
+        color: var(--color-backtotop-font) !important;
+    }
+}
+
+.numbered_pagination {
+    display: flex !important;
+    justify-content: center !important;
+
+    input[type="submit"],
+    input[type="button"] {
+        cursor: pointer !important;
+    }
+}
+
+/* --- 13. Responsive & Mobile --- */
 @media screen and (max-width: @phone) {
 
-    /* Prevent iOS zoom-on-focus */
     select,
     select:focus,
     textarea,
@@ -273,7 +483,7 @@ footer,
     }
 }
 
-/* --- 13. Theme Variable Mappings --- */
+/* --- 14. Nord Theme Properties --- */
 :root {
     --color-base-font: @nord1;
     --color-base-font-rgb: 59, 66, 82;
@@ -337,49 +547,6 @@ footer,
     --color-settings-tr-hover: @nord5;
     --color-settings-engine-description-font: @nord2;
     --color-settings-table-group-background: rgba(@nord3, 0.1);
-    --color-result-detail-font: @nord4;
-    --color-result-detail-label-font: @nord3;
-    --color-result-detail-background: @nord0;
-    --color-result-detail-hr: @nord2;
-    --color-result-detail-link: @nord8;
-    --color-result-detail-loader-border: rgba(@nord4, 0.2);
-    --color-result-detail-loader-borderleft: rgba(@nord0, 0);
-    --color-toolkit-badge-font: @nord6;
-    --color-toolkit-badge-background: @nord3;
-    --color-toolkit-kbd-font: @nord6;
-    --color-toolkit-kbd-background: @nord1;
-    --color-toolkit-dialog-border: @nord4;
-    --color-toolkit-dialog-background: @nord6;
-    --color-toolkit-tabs-label-border: @nord6;
-    --color-toolkit-tabs-section-border: @nord4;
-    --color-toolkit-select-background: @nord5;
-    --color-toolkit-select-border: @nord4;
-    --color-toolkit-select-background-hover: @nord4;
-    --color-toolkit-input-text-font: @nord0;
-    --color-toolkit-checkbox-onoff-off-background: @nord4;
-    --color-toolkit-checkbox-onoff-on-background: @nord9;
-    --color-toolkit-checkbox-onoff-on-mark-background: @nord14;
-    --color-toolkit-checkbox-onoff-on-mark-color: @nord6;
-    --color-toolkit-checkbox-onoff-off-mark-background: @nord11;
-    --color-toolkit-checkbox-onoff-off-mark-color: @nord6;
-    --color-toolkit-checkbox-label-background: @nord5;
-    --color-toolkit-checkbox-label-border: @nord4;
-    --color-toolkit-checkbox-input-border: @nord9;
-    --color-toolkit-engine-tooltip-border: @nord4;
-    --color-toolkit-engine-tooltip-background: @nord6;
-    --color-toolkit-loader-border: rgba(@nord1, 0.2);
-    --color-toolkit-loader-borderleft: rgba(@nord6, 0);
-    --color-doc-code: @nord1;
-    --color-doc-code-background: @nord5;
-    --color-bar-chart-primary: @nord8;
-    --color-bar-chart-secondary: @nord13;
-    --color-image-resolution-background: rgba(@nord0, 0.5);
-    --color-image-resolution-font: @nord6;
-    --color-loading-indicator: rgba(@nord1, 0.2);
-    --color-loading-indicator-gap: @nord6;
-    --color-line-number: @nord3;
-    --color-favicon-background-color: @nord5;
-    --color-favicon-border-color: @nord4;
 }
 
 .dark-themes() {
@@ -449,38 +616,6 @@ footer,
     --color-result-image-span-font: @nord4;
     --color-result-image-span-font-selected: @nord0;
     --color-result-image-background: @nord0;
-    --color-settings-tr-hover: @nord2;
-    --color-settings-engine-description-font: @nord4;
-    --color-settings-table-group-background: @nord1;
-    --color-toolkit-badge-font: @nord5;
-    --color-toolkit-badge-background: @nord3;
-    --color-toolkit-kbd-font: @nord0;
-    --color-toolkit-kbd-background: @nord5;
-    --color-toolkit-dialog-border: @nord3;
-    --color-toolkit-dialog-background: @nord1;
-    --color-toolkit-tabs-label-border: @nord0;
-    --color-toolkit-tabs-section-border: @nord3;
-    --color-toolkit-select-background: @nord2;
-    --color-toolkit-select-border: @nord3;
-    --color-toolkit-select-background-hover: @nord3;
-    --color-toolkit-input-text-font: @nord5;
-    --color-toolkit-checkbox-onoff-off-background: @nord2;
-    --color-toolkit-checkbox-onoff-on-background: var(--color-base-font);
-    --color-toolkit-checkbox-onoff-on-mark-background: var(--color-success);
-    --color-toolkit-checkbox-onoff-on-mark-color: @nord0;
-    --color-toolkit-checkbox-onoff-off-mark-background: var(--color-error);
-    --color-toolkit-checkbox-onoff-off-mark-color: @nord0;
-    --color-toolkit-checkbox-label-background: @nord1;
-    --color-toolkit-checkbox-label-border: @nord3;
-    --color-toolkit-checkbox-input-border: @nord9;
-    --color-toolkit-engine-tooltip-border: @nord1;
-    --color-toolkit-engine-tooltip-background: @nord2;
-    --color-toolkit-loader-border: rgba(@nord4, 0.2);
-    --color-toolkit-loader-borderleft: rgba(@nord0, 0);
-    --color-doc-code: @nord5;
-    --color-doc-code-background: @nord2;
-    --color-favicon-background-color: @nord4;
-    --color-favicon-border-color: @nord3;
 }
 
 .black-themes() {
@@ -496,6 +631,4 @@ footer,
     --color-result-background: #000;
     --color-result-detail-background: #000;
     --color-result-image-background: #000;
-    --color-toolkit-dialog-background: #000;
-    --color-toolkit-tabs-label-border: #000;
 }

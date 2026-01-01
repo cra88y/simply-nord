@@ -1,9 +1,0 @@
-{
-    "venvPath": "local",
-    "venv": "py3",
-    "include": [
-        "searx",
-        "searxng_extra",
-        "tests"
-    ]
-}
