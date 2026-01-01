@@ -126,7 +126,7 @@ button.category_button {
 .search_filters {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-    margin-left: (@results-offset + 0.25rem) !important;
+    margin-left: @results-offset !important;
     display: flex !important;
     overflow-x: auto !important;
     scrollbar-width: none;
@@ -181,6 +181,18 @@ button.category_button {
 
 #pagination {
     grid-area: pagination;
+}
+
+/* Image Grid Grouping */
+.template_group_images {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.25rem !important;
+
+    &::after {
+        flex-grow: 10;
+        content: "";
+    }
 }
 
 .result {
@@ -248,8 +260,15 @@ button.category_button {
 .result-images {
     border-radius: 25px !important;
     padding: 0.25rem !important;
-    height: @results-image-row-height !important;
     border: none !important;
+    max-width: fit-content !important;
+    background: transparent !important;
+
+    &>a {
+        display: grid !important;
+        grid-template-columns: max-content !important;
+        border: none !important;
+    }
 
     img {
         border-radius: 25px !important;
@@ -260,9 +279,34 @@ button.category_button {
     }
 }
 
-.result-videos img.thumbnail {
-    border-radius: 25px !important;
+.result-videos {
+    img.thumbnail {
+        border-radius: 25px !important;
+        border: none !important;
+        max-width: 100% !important;
+        height: auto !important;
+        float: left !important;
+        margin-right: 1rem !important;
+    }
+
+    .content {
+        display: flow-root !important;
+        overflow: hidden !important;
+    }
+}
+
+/* Category Specific Layouts (News, Map, etc) */
+.category-news,
+.category-map,
+.category-music,
+.category-files,
+.category-social {
     border: none !important;
+    /* Legacy used no borders */
+    background: var(--color-result-background) !important;
+    margin-bottom: 1rem !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 25px !important;
 }
 
 article[data-vim-selected] {
@@ -310,18 +354,21 @@ article[data-vim-selected] {
 /* --- 8. Suggestions & Related Searches --- */
 #suggestions {
     display: flex !important;
-    padding: 0.5rem 0 !important;
+    padding: 0 !important;
+    /* Remove vertical padding to help alignment */
+    margin: 0.5rem 0 !important;
     grid-area: header;
-    /* Ensure it stays in the header area */
 
     .wrapper {
         display: flex !important;
+        flex-wrap: nowrap !important;
+        /* Force single row */
         width: 100% !important;
         text-align: left !important;
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        padding: 0.5rem 0 !important;
+        padding: 0 !important;
 
         &::-webkit-scrollbar {
             display: none !important;
@@ -329,17 +376,21 @@ article[data-vim-selected] {
 
         form {
             display: inline-block !important;
+            flex-shrink: 0 !important;
+            /* Don't squash buttons */
             border-radius: 50px !important;
-            border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
-            background: var(--color-header-background) !important;
+            border: none !important;
+            /* "Less borders" per user request */
+            background: @nord1 !important;
+            /* Darker, stylized background */
             padding: 0.25rem 0.75rem !important;
             margin: 0.25rem !important;
             cursor: pointer !important;
             white-space: nowrap !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 
             &:hover {
                 background: var(--color-btn-background) !important;
-                border-color: var(--color-btn-background) !important;
 
                 input {
                     color: var(--color-btn-font) !important;
@@ -347,14 +398,16 @@ article[data-vim-selected] {
             }
 
             input[type="submit"] {
-                color: @nord10 !important;
+                color: @nord6 !important;
+                /* Light text on dark button */
                 background: transparent !important;
                 border: none !important;
-                font-size: 0.9rem !important;
+                font-size: 0.85rem !important;
                 cursor: pointer !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 text-transform: lowercase !important;
+                font-weight: 500 !important;
             }
         }
     }
@@ -452,6 +505,43 @@ footer,
 
 /* --- 13. Responsive & Mobile --- */
 @media screen and (max-width: @phone) {
+    #search_header {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    #results {
+        margin-left: 0 !important;
+        padding: 0 0.5rem !important;
+        grid-template:
+            "header" min-content
+            "corrections" min-content
+            "answers" min-content
+            "sidebar" min-content
+            "urls" 1fr
+            "pagination" min-content
+            / 100% !important;
+    }
+
+    .search_filters {
+        margin-left: 0.5rem !important;
+    }
+
+    #suggestions {
+        margin: 0 !important;
+
+        /* Remove margin to align with grid */
+        .wrapper {
+            padding: 0 !important;
+            /* Remove inner padding to align with grid */
+        }
+    }
+
+    #answers,
+    #sidebar .infobox {
+        padding: 1rem !important;
+        /* Reduce padding on mobile */
+    }
 
     select,
     select:focus,
@@ -465,6 +555,8 @@ footer,
 
     .result-images img {
         width: 45vw !important;
+        height: auto !important;
+        max-height: @results-image-row-height-phone !important;
     }
 
     #search_view:focus-within {
