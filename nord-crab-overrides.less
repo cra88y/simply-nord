@@ -1,0 +1,501 @@
+/*
+* Simply-Nord: The Master Override File
+* 
+* This file consolidates ALL theme customizations:
+* 1. Nord Color Palette
+* 2. Layout & Responsive Structural Overrides
+* 3. Functional UI (Autocomplete, Search, Settings)
+* 4. Visual Removals (Parity Cleanliness)
+* 5. Light/Dark/Black Theme Property Maps
+*/
+
+/* --- 1. Nord Color Palette --- */
+@nord01: #1d2128;
+@nord0: #2e3440;
+@nord1: #3b4252;
+@nord2: #434c5e;
+@nord3: #4c566a;
+@nord4: #d8dee9;
+@nord5: #e5e9f0;
+@nord6: #eceff4;
+@nord7: #8fbcbb;
+@nord8: #88c0d0;
+@nord9: #81a1c1;
+@nord10: #5e81ac;
+@nord11: #bf616a;
+@nord12: #d08770;
+@nord13: #ebcb8b;
+@nord14: #a3be8c;
+@nord15: #b48ead;
+
+/* --- 2. Base Structural Overrides --- */
+html {
+    line-height: 1.25;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+}
+
+.sxng-icon-set-small {
+    transform: scale(0.8) !important;
+    vertical-align: middle !important;
+}
+
+/* --- 3. Search Header & Box UI --- */
+#search_header {
+    padding-top: 1rem !important;
+    gap: 0.5rem !important;
+    border-bottom: none !important;
+}
+
+.search_box {
+    border-radius: 50px !important;
+    max-width: @search-width !important;
+}
+
+#q,
+#send_search {
+    padding: 0.8rem 1rem !important;
+    font-size: 1.125rem !important;
+}
+
+#q {
+    border-top-left-radius: 50px !important;
+    border-bottom-left-radius: 50px !important;
+
+    &::placeholder {
+        color: transparent !important;
+    }
+}
+
+#send_search {
+    border-top-right-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
+    padding-right: 1.5rem !important;
+}
+
+#clear_search {
+    width: 2rem !important;
+}
+
+/* --- 4. Category Navigation --- */
+button.category_button {
+    text-transform: lowercase !important;
+    font-size: 1rem !important;
+    padding: 0.25rem 1rem 0.5rem 0.75rem !important;
+    border-bottom: 2px solid transparent !important;
+
+    &.selected,
+    &:active {
+        color: var(--color-categories-item-selected-font) !important;
+        border-bottom: 2px solid var(--color-categories-item-border-selected) !important;
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        transition: 0s;
+    }
+}
+
+.search_filters {
+    margin-top: 0 !important;
+    margin-left: (@results-offset + 0.25rem) !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* --- 5. Result Layouts & Typography --- */
+#results {
+    margin-top: 0.125rem !important;
+}
+
+.result {
+    padding: 0.5rem 1rem !important;
+    max-width: 100% !important;
+
+    h3 {
+        font-size: 1.125rem !important;
+        margin: 0.125rem 0 0 0 !important;
+
+        a:visited {
+            color: var(--color-result-link-visited-font) !important;
+        }
+    }
+
+    .url_wrapper {
+        font-size: 0.9rem !important;
+    }
+
+    img.thumbnail {
+        float: right !important;
+        border-radius: 25px !important;
+        box-shadow: var(--color-search-shadow) !important;
+        max-width: 45% !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+}
+
+.engines {
+    filter: blur(0.5px) !important;
+    text-align: end !important;
+    font-size: 0.8rem !important;
+    width: 100% !important;
+}
+
+/* --- 6. Special Result Types --- */
+.result-images {
+    border-radius: 25px !important;
+    padding: 0.25rem !important;
+    height: @results-image-row-height !important;
+
+    img {
+        border-radius: 25px !important;
+        object-fit: contain !important;
+    }
+}
+
+article[data-vim-selected] {
+    .rounded-corners(25px) !important;
+}
+
+/* --- 7. Sidebar & Answers --- */
+#answers,
+#sidebar .infobox {
+    .rounded-corners(25px) !important;
+    background: var(--color-header-background) !important;
+    padding: 1.5rem !important;
+    border: none !important;
+}
+
+#suggestions .wrapper form {
+    border-radius: 50px !important;
+    border: 0.125rem solid #0002 !important;
+    padding: 0.125rem 0.5rem !important;
+}
+
+/* --- 8. Home Page (Index) Customizations --- */
+#main_index {
+    margin-top: 33vh !important;
+}
+
+.index_endpoint {
+    background: var(--color-header-background) !important;
+}
+
+/* --- 9. Autocomplete Functional Overrides --- */
+.autocomplete {
+    min-width: @search-width !important;
+    border-radius: 0 !important;
+
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: var(--color-header-background) !important;
+    }
+
+    >ul>li {
+        padding: 1rem !important;
+    }
+
+    &.open {
+        display: none; // Managed by focus-within below
+        max-height: 100dvh !important;
+        border-radius: 0 0 25px 25px !important;
+        margin-top: 3.5rem !important;
+        z-index: 5000;
+    }
+}
+
+#search_view:focus-within>.search_box>.autocomplete.open {
+    display: block !important;
+}
+
+/* --- 10. Toolkit UI Overrides --- */
+select {
+    padding: 0.25rem 0.5rem !important;
+    background-size: 1.5rem !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* --- 11. Visual Removals --- */
+footer,
+.link_on_top_about,
+.link_on_top_donate,
+#search_logo,
+.logo,
+.title h1,
+.dialog-warning-block,
+#language,
+#safesearch {
+    display: none !important;
+}
+
+/* --- 12. Responsive & Mobile --- */
+@media screen and (max-width: @phone) {
+
+    /* Prevent iOS zoom-on-focus */
+    select,
+    select:focus,
+    textarea,
+    textarea:focus,
+    input,
+    input:focus,
+    #q {
+        font-size: 16px !important;
+    }
+
+    .result-images img {
+        width: 45vw !important;
+    }
+
+    #search_view:focus-within {
+        background-color: var(--color-header-background) !important;
+        border-radius: 0 0 25px 25px !important;
+        max-width: 100dvw !important;
+    }
+
+    .category_checkbox label,
+    .category_button {
+        padding: 0.5rem 1rem !important;
+    }
+
+    .autocomplete {
+        min-width: 100% !important;
+    }
+}
+
+/* --- 13. Theme Variable Mappings --- */
+:root {
+    --color-base-font: @nord1;
+    --color-base-font-rgb: 59, 66, 82;
+    --color-base-background: @nord6;
+    --color-base-background-mobile: @nord5;
+    --color-url-font: @nord10;
+    --color-url-visited-font: @nord15;
+    --color-header-background: @nord6;
+    --color-header-border: @nord4;
+    --color-footer-background: @nord6;
+    --color-footer-border: @nord4;
+    --color-sidebar-border: @nord4;
+    --color-sidebar-font: @nord1;
+    --color-sidebar-background: @nord5;
+    --color-backtotop-font: @nord1;
+    --color-backtotop-border: @nord4;
+    --color-backtotop-background: @nord6;
+    --color-btn-background: @nord9;
+    --color-btn-font: @nord6;
+    --color-show-btn-background: @nord4;
+    --color-show-btn-font: @nord1;
+    --color-search-border: @nord4;
+    --color-search-shadow: 0 2px 8px rgba(@nord0, 0.15);
+    --color-search-background: @nord6;
+    --color-search-font: @nord0;
+    --color-search-background-hover: @nord9;
+    --color-error: @nord11;
+    --color-error-background: lighten(@nord11, 35%);
+    --color-warning: @nord12;
+    --color-warning-background: lighten(@nord12, 35%);
+    --color-success: @nord14;
+    --color-success-background: lighten(@nord14, 35%);
+    --color-categories-item-selected-font: @nord10;
+    --color-categories-item-border-selected: @nord10;
+    --color-autocomplete-font: @nord0;
+    --color-autocomplete-border: @nord4;
+    --color-autocomplete-shadow: 0 2px 8px rgba(@nord0, 0.1);
+    --color-autocomplete-background: @nord6;
+    --color-autocomplete-background-hover: @nord5;
+    --color-answer-font: @nord1;
+    --color-answer-background: @nord5;
+    --color-result-keyvalue-col-table: @nord5;
+    --color-result-keyvalue-odd: @nord5;
+    --color-result-keyvalue-even: @nord6;
+    --color-result-background: @nord6;
+    --color-result-border: @nord4;
+    --color-result-url-font: @nord3;
+    --color-result-vim-selected: @nord5;
+    --color-result-vim-arrow: @nord9;
+    --color-result-description-highlight-font: @nord1;
+    --color-result-link-font: @nord10;
+    --color-result-link-font-highlight: @nord7;
+    --color-result-link-visited-font: @nord15;
+    --color-result-publishdate-font: @nord2;
+    --color-result-engines-font: @nord3;
+    --color-result-search-url-border: @nord4;
+    --color-result-search-url-font: @nord1;
+    --color-result-image-span-font: @nord1;
+    --color-result-image-span-font-selected: @nord6;
+    --color-result-image-background: @nord6;
+    --color-settings-tr-hover: @nord5;
+    --color-settings-engine-description-font: @nord2;
+    --color-settings-table-group-background: rgba(@nord3, 0.1);
+    --color-result-detail-font: @nord4;
+    --color-result-detail-label-font: @nord3;
+    --color-result-detail-background: @nord0;
+    --color-result-detail-hr: @nord2;
+    --color-result-detail-link: @nord8;
+    --color-result-detail-loader-border: rgba(@nord4, 0.2);
+    --color-result-detail-loader-borderleft: rgba(@nord0, 0);
+    --color-toolkit-badge-font: @nord6;
+    --color-toolkit-badge-background: @nord3;
+    --color-toolkit-kbd-font: @nord6;
+    --color-toolkit-kbd-background: @nord1;
+    --color-toolkit-dialog-border: @nord4;
+    --color-toolkit-dialog-background: @nord6;
+    --color-toolkit-tabs-label-border: @nord6;
+    --color-toolkit-tabs-section-border: @nord4;
+    --color-toolkit-select-background: @nord5;
+    --color-toolkit-select-border: @nord4;
+    --color-toolkit-select-background-hover: @nord4;
+    --color-toolkit-input-text-font: @nord0;
+    --color-toolkit-checkbox-onoff-off-background: @nord4;
+    --color-toolkit-checkbox-onoff-on-background: @nord9;
+    --color-toolkit-checkbox-onoff-on-mark-background: @nord14;
+    --color-toolkit-checkbox-onoff-on-mark-color: @nord6;
+    --color-toolkit-checkbox-onoff-off-mark-background: @nord11;
+    --color-toolkit-checkbox-onoff-off-mark-color: @nord6;
+    --color-toolkit-checkbox-label-background: @nord5;
+    --color-toolkit-checkbox-label-border: @nord4;
+    --color-toolkit-checkbox-input-border: @nord9;
+    --color-toolkit-engine-tooltip-border: @nord4;
+    --color-toolkit-engine-tooltip-background: @nord6;
+    --color-toolkit-loader-border: rgba(@nord1, 0.2);
+    --color-toolkit-loader-borderleft: rgba(@nord6, 0);
+    --color-doc-code: @nord1;
+    --color-doc-code-background: @nord5;
+    --color-bar-chart-primary: @nord8;
+    --color-bar-chart-secondary: @nord13;
+    --color-image-resolution-background: rgba(@nord0, 0.5);
+    --color-image-resolution-font: @nord6;
+    --color-loading-indicator: rgba(@nord1, 0.2);
+    --color-loading-indicator-gap: @nord6;
+    --color-line-number: @nord3;
+    --color-favicon-background-color: @nord5;
+    --color-favicon-border-color: @nord4;
+}
+
+.dark-themes() {
+    --color-base-font: @nord4;
+    --color-base-font-rgb: 187, 187, 187;
+    --color-base-background: @nord0;
+    --color-base-background-mobile: @nord0;
+    --color-url-font: @nord7;
+    --color-url-visited-font: @nord15;
+    --color-header-background: @nord01;
+    --color-header-border: @nord1;
+    --color-footer-background: @nord0;
+    --color-footer-border: @nord1;
+    --color-sidebar-border: @nord3;
+    --color-sidebar-font: var(--color-base-font);
+    --color-sidebar-background: @nord1;
+    --color-backtotop-font: @nord4;
+    --color-backtotop-border: @nord1;
+    --color-backtotop-background: @nord2;
+    --color-btn-background: @nord9;
+    --color-btn-font: @nord6;
+    --color-show-btn-background: @nord3;
+    --color-show-btn-font: @nord5;
+    --color-search-border: @nord3;
+    --color-search-shadow: 0 4px 16px rgba(@nord0, 0.9);
+    --color-search-background: @nord0;
+    --color-search-font: @nord5;
+    --color-search-background-hover: @nord9;
+    --color-error: @nord11;
+    --color-error-background: @nord2;
+    --color-warning: @nord12;
+    --color-warning-background: @nord2;
+    --color-success: @nord14;
+    --color-success-background: @nord2;
+    --color-categories-item-selected-font: @nord8;
+    --color-categories-item-border-selected: @nord8;
+    --color-autocomplete-font: @nord5;
+    --color-autocomplete-border: @nord3;
+    --color-autocomplete-shadow: 0 2px 8px rgba(@nord0, 0.25);
+    --color-autocomplete-background: @nord1;
+    --color-autocomplete-background-hover: @nord2;
+    --color-answer-font: @nord4;
+    --color-answer-background: @nord1;
+    --color-result-keyvalue-col-table: @nord1;
+    --color-result-keyvalue-odd: @nord1;
+    --color-result-keyvalue-even: @nord0;
+    --color-result-background: @nord0;
+    --color-result-border: @nord1;
+    --color-result-url-font: @nord5;
+    --color-result-vim-selected: rgba(@nord2, 0.8);
+    --color-result-vim-arrow: @nord9;
+    --color-result-description-highlight-font: @nord6;
+    --color-result-link-font: @nord8;
+    --color-result-link-font-highlight: @nord7;
+    --color-result-link-visited-font: @nord12;
+    --color-result-publishdate-font: var(--color-answer-font);
+    --color-result-engines-font: @nord8;
+    --color-result-search-url-border: @nord3;
+    --color-result-search-url-font: @nord5;
+    --color-result-detail-font: @nord5;
+    --color-result-detail-label-font: @nord4;
+    --color-result-detail-background: @nord0;
+    --color-result-detail-hr: @nord3;
+    --color-result-detail-link: @nord7;
+    --color-result-detail-loader-border: rgba(@nord4, 0.2);
+    --color-result-detail-loader-borderleft: rgba(@nord0, 0);
+    --color-result-image-span-font: @nord4;
+    --color-result-image-span-font-selected: @nord0;
+    --color-result-image-background: @nord0;
+    --color-settings-tr-hover: @nord2;
+    --color-settings-engine-description-font: @nord4;
+    --color-settings-table-group-background: @nord1;
+    --color-toolkit-badge-font: @nord5;
+    --color-toolkit-badge-background: @nord3;
+    --color-toolkit-kbd-font: @nord0;
+    --color-toolkit-kbd-background: @nord5;
+    --color-toolkit-dialog-border: @nord3;
+    --color-toolkit-dialog-background: @nord1;
+    --color-toolkit-tabs-label-border: @nord0;
+    --color-toolkit-tabs-section-border: @nord3;
+    --color-toolkit-select-background: @nord2;
+    --color-toolkit-select-border: @nord3;
+    --color-toolkit-select-background-hover: @nord3;
+    --color-toolkit-input-text-font: @nord5;
+    --color-toolkit-checkbox-onoff-off-background: @nord2;
+    --color-toolkit-checkbox-onoff-on-background: var(--color-base-font);
+    --color-toolkit-checkbox-onoff-on-mark-background: var(--color-success);
+    --color-toolkit-checkbox-onoff-on-mark-color: @nord0;
+    --color-toolkit-checkbox-onoff-off-mark-background: var(--color-error);
+    --color-toolkit-checkbox-onoff-off-mark-color: @nord0;
+    --color-toolkit-checkbox-label-background: @nord1;
+    --color-toolkit-checkbox-label-border: @nord3;
+    --color-toolkit-checkbox-input-border: @nord9;
+    --color-toolkit-engine-tooltip-border: @nord1;
+    --color-toolkit-engine-tooltip-background: @nord2;
+    --color-toolkit-loader-border: rgba(@nord4, 0.2);
+    --color-toolkit-loader-borderleft: rgba(@nord0, 0);
+    --color-doc-code: @nord5;
+    --color-doc-code-background: @nord2;
+    --color-favicon-background-color: @nord4;
+    --color-favicon-border-color: @nord3;
+}
+
+.black-themes() {
+    --color-base-background: #000;
+    --color-base-background-mobile: #000;
+    --color-header-background: #000;
+    --color-footer-background: #000;
+    --color-sidebar-background: #000;
+    --color-search-background: #000;
+    --color-autocomplete-background: #000;
+    --color-answer-background: #000;
+    --color-result-keyvalue-even: #000;
+    --color-result-background: #000;
+    --color-result-detail-background: #000;
+    --color-result-image-background: #000;
+    --color-toolkit-dialog-background: #000;
+    --color-toolkit-tabs-label-border: #000;
+}

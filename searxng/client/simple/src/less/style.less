@@ -4,6 +4,26 @@
 * To convert "style.less" to "style.css" run: $make styles
 */
 
+/* Simply-Nord: Visual removals via CSS instead of template modification */
+footer,
+.link_on_top_about,
+.link_on_top_donate,
+#search_logo,
+.title h1,
+.dialog-warning-block {
+  display: none !important;
+}
+
+/* Hide placeholder text */
+#q::placeholder {
+  color: transparent;
+}
+
+/* Simply-Nord: Adjustments for removed header links */
+#link_on_top {
+  font-size: 1.25rem;
+}
+
 // stylelint-disable no-descending-specificity
 
 @import (inline) "../../node_modules/normalize.css/normalize.css";
@@ -456,6 +476,7 @@ article[data-vim-selected].category-social {
 }
 
 @supports not (aspect-ratio: 1 / 1) {
+
   // support older browsers which do not have aspect-ratio
   // https://caniuse.com/?search=aspect-ratio
   .result-videos .embedded-video iframe {
@@ -506,7 +527,7 @@ article[data-vim-selected].category-social {
   padding: 0.25rem;
   border: none !important;
 
-  & > a {
+  &>a {
     position: relative;
     outline: none;
     display: grid;
@@ -615,12 +636,14 @@ article[data-vim-selected].category-social {
     text-align: left;
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
     scrollbar-width: none;
     padding-bottom: 0.25rem;
 
     &::-webkit-scrollbar {
-      display: none; /* Safari and Chrome */
+      display: none;
+      /* Safari and Chrome */
     }
 
     form {
@@ -1040,7 +1063,7 @@ summary.title {
   }
 }
 
-@media screen and (width <= calc(@tablet - 0.5px)) {
+@media screen and (width <=calc(@tablet - 0.5px)) {
   #links_on_top {
     span {
       display: none;
@@ -1048,9 +1071,10 @@ summary.title {
   }
 }
 
-@media screen and (width <= 52rem) {
+@media screen and (width <=52rem) {
   body.results_endpoint {
     #links_on_top {
+
       .link_on_top_about,
       .link_on_top_donate {
         display: none;
@@ -1060,6 +1084,7 @@ summary.title {
 }
 
 @media screen and (min-width: @phone) and (max-width: @tablet) {
+
   // when .center-alignment-yes, see style-center.less
   // the media query includes "min-width: @phone"
   // because the phone layout includes the tablet layout unconditionally.
@@ -1113,6 +1138,7 @@ summary.title {
 */
 
 @media screen and (max-width: @phone) {
+
   select,
   select:focus,
   textarea,
@@ -1122,6 +1148,7 @@ summary.title {
   #q {
     font-size: 16px !important;
   }
+
   // based on the tablet layout
   .results-tablet();
 
