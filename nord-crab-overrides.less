@@ -795,3 +795,19 @@ footer,
     --color-result-detail-background: #000;
     --color-result-image-background: #000;
 }
+
+/* --- 15. Theme Activation Hooks --- */
+:root.theme-dark {
+    .dark-themes();
+}
+
+:root.theme-black {
+    .dark-themes();
+    .black-themes();
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.theme-light) {
+        .dark-themes();
+    }
+}

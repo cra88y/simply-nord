@@ -29,8 +29,7 @@ Write-Host "2. Injecting Nord & Crab LESS overrides..." -ForegroundColor Cyan
 $LessDest = Join-Path $TempBuild "client\simple\src\less"
 Copy-Item (Join-Path $RepoPath "nord-crab-overrides.less") $LessDest -Force
 
-# Inject into definitions (for variables) and style (to win the cascade)
-Add-Content (Join-Path $LessDest "definitions.less") "`n@import `"nord-crab-overrides.less`";"
+# Inject only into style.less to avoid breaking minimal files like rss.less
 Add-Content (Join-Path $LessDest "style.less") "`n@import `"nord-crab-overrides.less`";"
 
 # 4. Apply Template Overrides (Repo CrabX -> Vanilla Templates)
