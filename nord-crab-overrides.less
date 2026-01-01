@@ -1,11 +1,4 @@
-/* ==========================================================================
-   NORD CRAB OVERRIDES - FINAL AUDITED VERSION
-   Based on changes_standard.diff (Jan 2025)
-   ========================================================================== */
-
-/* --- 1. THEME VARIABLES (Colors) --- */
-
-// A. Nord Palette Definitions
+/* --- 0. DEFINITIONS & VARIABLES --- */
 @nord0: #2e3440;
 @nord1: #3b4252;
 @nord2: #434c5e;
@@ -24,128 +17,430 @@
 @nord15: #b48ead;
 @header-dark: #1d2128;
 
-// B. Mixins for Modes
-.dark-themes() {
-    --color-base-font: @nord4;
-    --color-base-background: @nord0;
-    --color-base-background-mobile: @nord0;
-    --color-url-font: @nord7;
-    --color-url-visited-font: @nord15;
-    --color-header-background: @header-dark;
-    --color-header-border: @nord1;
-    --color-footer-background: @nord0;
-    --color-footer-border: @nord1;
-    --color-sidebar-border: @nord3;
-    --color-sidebar-font: var(--color-base-font);
-    --color-sidebar-background: @nord1;
-    --color-backtotop-font: @nord4;
-    --color-backtotop-border: @nord1;
-    --color-backtotop-background: @nord2;
-    --color-btn-background: @nord9;
-    --color-btn-font: @nord6;
-    --color-show-btn-background: @nord3;
-    --color-show-btn-font: @nord5;
-    --color-search-border: @nord3;
-    --color-search-shadow: 0 4px 16px rgba(46, 52, 64, 0.9);
-    --color-search-background: @nord0;
-    --color-search-font: @nord5;
-    --color-search-background-hover: @nord9;
-    --color-error: @nord11;
-    --color-error-background: @nord2;
-    --color-warning: @nord12;
-    --color-warning-background: @nord2;
-    --color-success: @nord14;
-    --color-success-background: @nord2;
-    --color-categories-item-selected-font: @nord8;
-    --color-categories-item-border-selected: @nord8;
-    --color-autocomplete-font: @nord5;
-    --color-autocomplete-border: @nord3;
-    --color-autocomplete-shadow: 0 2px 8px rgba(46, 52, 64, 0.25);
-    --color-autocomplete-background: @nord1;
-    --color-autocomplete-background-hover: @nord2;
-    --color-answer-font: @nord4;
-    --color-answer-background: @nord1;
-    --color-result-keyvalue-col-table: @nord1;
-    --color-result-keyvalue-odd: @nord1;
-    --color-result-keyvalue-even: @nord0;
-    --color-result-background: @nord0;
-    --color-result-border: @nord1;
-    --color-result-url-font: @nord5;
-    --color-result-vim-selected: rgba(67, 76, 94, 0.8);
-    --color-result-vim-arrow: @nord9;
-    --color-result-description-highlight-font: @nord6;
-    --color-result-link-font: @nord8;
-    --color-result-link-font-highlight: @nord7;
-    --color-result-link-visited-font: @nord12;
-    --color-result-publishdate-font: var(--color-answer-font);
-    --color-result-engines-font: @nord8;
-    --color-result-search-url-border: @nord3;
-    --color-result-search-url-font: @nord5;
-    --color-result-detail-font: @nord5;
-    --color-result-detail-label-font: @nord4;
-    --color-result-detail-background: @nord0;
-    --color-result-detail-hr: @nord3;
-    --color-result-detail-link: @nord7;
-    --color-result-detail-loader-border: rgba(216, 222, 233, 0.2);
-    --color-result-detail-loader-borderleft: rgba(46, 52, 64, 0);
-    --color-result-image-background: @nord0;
-    --color-result-image-span-font: @nord4;
-    --color-result-image-span-font-selected: @nord0;
-    --color-settings-tr-hover: @nord2;
-    --color-settings-engine-description-font: @nord4;
-    --color-settings-table-group-background: @nord1;
-    --color-toolkit-badge-font: @nord5;
-    --color-toolkit-badge-background: @nord3;
-    --color-toolkit-kbd-font: @nord0;
-    --color-toolkit-kbd-background: @nord5;
-    --color-toolkit-dialog-border: @nord3;
-    --color-toolkit-dialog-background: @nord1;
-    --color-toolkit-tabs-label-border: @nord0;
-    --color-toolkit-tabs-section-border: @nord3;
-    --color-toolkit-select-background: @nord2;
-    --color-toolkit-select-border: @nord3;
-    --color-toolkit-select-background-hover: @nord3;
-    --color-toolkit-input-text-font: @nord5;
-    --color-toolkit-checkbox-onoff-off-background: @nord2;
-    --color-toolkit-checkbox-onoff-on-background: var(--color-base-font);
-    --color-toolkit-checkbox-onoff-on-mark-background: var(--color-success);
-    --color-toolkit-checkbox-onoff-on-mark-color: @nord0;
-    --color-toolkit-checkbox-onoff-off-mark-background: var(--color-error);
-    --color-toolkit-checkbox-onoff-off-mark-color: @nord0;
-    --color-toolkit-checkbox-label-background: @nord1;
-    --color-toolkit-checkbox-label-border: @nord3;
-    --color-toolkit-checkbox-input-border: @nord9;
-    --color-toolkit-engine-tooltip-border: @nord1;
-    --color-toolkit-engine-tooltip-background: @nord2;
-    --color-toolkit-loader-border: rgba(216, 222, 233, 0.2);
-    --color-toolkit-loader-borderleft: rgba(46, 52, 64, 0);
-    --color-doc-code: @nord5;
-    --color-doc-code-background: @nord2;
-    --color-favicon-background-color: @nord4;
-    --color-favicon-border-color: @nord3;
+/* Layout Variables */
+@results-width: 45rem;
+@results-sidebar-width: 25rem;
+@results-offset: 10rem;
+@results-gap: 5rem;
+@search-width: 52rem;
+@results-image-row-height: 15.5rem;
+
+/* --- 1. GLOBAL STRUCTURAL BASE --- */
+html {
+    line-height: 1.25 !important;
+    -webkit-font-smoothing: antialiased !important;
+    text-rendering: optimizelegibility !important;
+    font-variant-numeric: proportional-nums;
 }
 
-.black-theme-vars() {
-    --color-base-background: #000;
-    --color-base-background-mobile: #000;
-    --color-header-background: #000;
-    --color-footer-background: #000;
-    --color-search-background: #000;
-    --color-autocomplete-background: #000;
-    --color-answer-background: #000;
-    --color-result-background: #000;
-    --color-result-keyvalue-even: #000;
-    --color-result-detail-background: #000;
-    --color-result-image-background: #000;
-    --color-toolkit-dialog-background: #000;
-    --color-toolkit-tabs-label-border: #000;
+/* Fix inputs alignment */
+button,
+input,
+optgroup,
+select,
+textarea {
+    line-height: 1.25 !important;
+    vertical-align: middle !important;
 }
 
-// C. Apply Variables
+/* Scale down icons */
+.sxng-icon-set-small {
+    transform: scale(0.8) !important;
+    vertical-align: middle !important;
+}
+
+/* --- 2. VISUAL REMOVALS --- */
+footer,
+.link_on_top_about,
+.link_on_top_donate,
+#search_logo,
+.logo,
+.title h1,
+.dialog-warning-block,
+#language,
+#safesearch {
+    display: none !important;
+}
+
+/* --- 3. SEARCH HEADER & BOX --- */
+#search_header {
+    padding-top: 1rem !important;
+    gap: 0.5rem !important;
+    border-bottom: none !important;
+    background: var(--color-header-background) !important;
+
+    /* Mobile Grid Fix */
+    @media screen and (max-width: 50em) {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0.1rem 0 0 0 !important;
+        grid-template-areas: "logo search" "categories categories" !important;
+    }
+}
+
+/* The Round Search Bar */
+.search_box {
+    border-radius: 50px !important;
+    max-width: @search-width !important;
+    border: none !important;
+    box-shadow: var(--color-search-shadow) !important;
+    width: 100%;
+}
+
+#q {
+    border-top-left-radius: 50px !important;
+    border-bottom-left-radius: 50px !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 1.125rem !important;
+    border: none !important;
+    width: 100% !important;
+
+    &::placeholder {
+        color: transparent !important;
+    }
+}
+
+#send_search {
+    border-top-right-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
+    padding-right: 1.5rem !important;
+    border: none !important;
+}
+
+#clear_search {
+    width: 2rem !important;
+    border-radius: 0 !important;
+    background: var(--color-search-background) !important;
+    border: none !important;
+}
+
+/* Mobile Width & Zoom Fixes */
+#search_view {
+    @media screen and (max-width: 50em) {
+        max-width: 100dvw !important;
+        box-sizing: border-box;
+        padding: 0 0.5rem;
+    }
+}
+
+/* --- 4. CATEGORY TABS (Mobile Scroll) --- */
+button.category_button {
+    text-transform: lowercase !important;
+    font-size: 1rem !important;
+    padding: 0.25rem 1rem 0.5rem 0.75rem !important;
+    border-bottom: 2px solid transparent !important;
+    white-space: nowrap !important;
+
+    &.selected {
+        color: var(--color-categories-item-selected-font) !important;
+        border-bottom: 2px solid var(--color-categories-item-border-selected) !important;
+    }
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        transition: 0s;
+        filter: brightness(0.02) blur(1.5px);
+    }
+}
+
+.search_filters,
+#categories {
+    margin-left: @results-offset !important;
+    display: flex !important;
+
+    /* SCROLL LOGIC */
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media screen and (max-width: 50em) {
+        margin-left: 0.5rem !important;
+        width: 100% !important;
+        padding-right: 1rem !important;
+    }
+}
+
+/* --- 5. SUGGESTIONS (Pill Scroll) --- */
+#suggestions {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    margin: 0.5rem 0 !important;
+    width: @results-width !important;
+    max-width: 100% !important;
+
+    @media screen and (max-width: 50em) {
+        width: 100% !important;
+    }
+
+    .wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none;
+        padding-bottom: 0.25rem !important;
+
+        &::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        form {
+            display: inline-block !important;
+            flex: 0 0 auto !important;
+            border-radius: 50px !important;
+            border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
+            background: var(--color-header-background) !important;
+            padding: 0.125rem 0.5rem !important;
+            margin: 0.125rem !important;
+
+            input[type="submit"] {
+                color: @nord7 !important;
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+        }
+    }
+}
+
+/* --- 6. RESULTS LAYOUT (Grid) --- */
+#results {
+    margin-top: 0.125rem !important;
+    margin-left: @results-offset !important;
+    gap: 0 @results-gap !important;
+    display: grid !important;
+    padding: 0 !important;
+
+    grid-template:
+        "header sidebar" min-content
+        "corrections sidebar" min-content
+        "answers sidebar" min-content
+        "urls sidebar" 1fr
+        "pagination sidebar" min-content
+        / @results-width @results-sidebar-width !important;
+
+    @media screen and (max-width: 50em) {
+        margin-left: 0 !important;
+        grid-template:
+            "header" min-content
+            "corrections" min-content
+            "answers" min-content
+            "sidebar" min-content
+            "urls" 1fr
+            "pagination" min-content
+            / 100% !important;
+    }
+}
+
+/* --- 7. INDIVIDUAL RESULT STYLING --- */
+.result {
+    padding: 0.5rem 1rem !important;
+    margin: 0 !important;
+    border: none !important;
+    background: var(--color-result-background) !important;
+    border-radius: 25px !important;
+    margin-bottom: 1rem !important;
+
+    h3 {
+        font-size: 1.125rem !important;
+        margin: 0.125rem 0 0 0 !important;
+    }
+
+    .content,
+    .stat {
+        font-size: 0.9em !important;
+        line-height: 1.25 !important;
+    }
+
+    img.thumbnail {
+        float: right !important;
+        border-radius: 25px !important;
+        box-shadow: var(--color-search-shadow) !important;
+        max-width: 45% !important;
+        max-height: 10rem !important;
+        object-fit: contain !important;
+        border: none !important;
+    }
+
+    .engines {
+        filter: blur(0.5px) !important;
+        text-align: end !important;
+        font-size: 0.8rem !important;
+        width: 100% !important;
+        color: var(--color-result-engines-font) !important;
+    }
+
+    .altlink a {
+        border-radius: 50px !important;
+        padding: 0.25rem 0.5rem !important;
+        background: var(--color-show-btn-background) !important;
+    }
+}
+
+/* --- 7b. FAVICON STYLING --- */
+.favicon img {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+    border-radius: 10% !important;
+    background-color: var(--color-favicon-background-color) !important;
+    border: 1px solid var(--color-favicon-border-color) !important;
+    display: flex !important;
+}
+
+/* --- 8. SPECIAL RESULT TYPES --- */
+
+/* Images */
+.result-images {
+    border-radius: 25px !important;
+    padding: 0.25rem !important;
+    border: none !important;
+    background: transparent !important;
+    overflow: hidden !important;
+
+    img {
+        border-radius: 25px !important;
+        object-fit: contain !important;
+        border: none !important;
+        height: @results-image-row-height !important;
+        width: auto !important;
+
+        @media screen and (max-width: 50em) {
+            width: 45vw !important;
+            height: fit-content !important;
+            max-height: none !important;
+        }
+    }
+
+    .resolution {
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
+        color: var(--color-result-image-span-font) !important;
+        font-size: 0.8rem !important;
+    }
+}
+
+.result-videos img.thumbnail {
+    border-radius: 25px !important;
+    border: none !important;
+    float: left !important;
+    margin-right: 1rem !important;
+}
+
+.category-news,
+.category-social {
+    border: none !important;
+    background: var(--color-result-background) !important;
+    border-radius: 25px !important;
+    padding: 0.5rem 1rem !important;
+}
+
+/* --- 9. SIDEBAR & INFOBOXES --- */
+/* Added .sidebar-collapsible to ensure Wikipedia boxes get the card look */
+#sidebar .infobox,
+#answers,
+.sidebar-collapsible {
+    border-radius: 25px !important;
+    background: var(--color-header-background) !important;
+    padding: 1.5rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0.5rem 0 !important;
+}
+
+#sidebar ul,
+#sidebar ol,
+#sidebar li,
+#answers ul,
+#answers ol,
+#answers li {
+    list-style: none !important;
+    padding-left: 0 !important;
+}
+
+/* --- 10. AUTOCOMPLETE --- */
+.autocomplete {
+    min-width: @search-width !important;
+    border-radius: 0 0 25px 25px !important;
+    border: none !important;
+    box-shadow: var(--color-autocomplete-shadow) !important;
+    background-color: var(--color-autocomplete-background) !important;
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+
+    @media screen and (max-width: 50em) {
+        min-width: 100% !important;
+        max-width: 100dvw !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    &.open {
+        display: block !important;
+    }
+}
+
+/* --- 11. GAP FIXES --- */
+#main_index {
+    margin-top: 33vh !important;
+}
+
+/* Restored Link Font Size */
+#link_on_top {
+    font-size: 1.25rem !important;
+}
+
+#backToTop {
+    border-radius: 50px !important;
+    background: var(--color-header-background) !important;
+    border: none !important;
+    bottom: 8rem !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s;
+
+    a {
+        color: var(--color-backtotop-font) !important;
+    }
+}
+
+.numbered_pagination {
+    display: flex !important;
+    justify-content: center !important;
+
+    input {
+        cursor: pointer !important;
+    }
+}
+
+table tr.pref-group th {
+    border-radius: 25px !important;
+    padding-top: 1rem !important;
+}
+
+td:hover .engine-tooltip {
+    display: none !important;
+}
+
+iframe[src^="https://genius.com/songs"] {
+    border-radius: 25px !important;
+}
+
+/* --- 12. COLOR PALETTE & MODES --- */
 :root {
-    // Light Theme (Snow Storm)
     --color-base-font: @nord1;
-    --color-base-font-rgb: 59, 66, 82;
     --color-base-background: @nord6;
     --color-base-background-mobile: @nord5;
     --color-url-font: @nord10;
@@ -165,21 +460,21 @@
     --color-show-btn-background: @nord4;
     --color-show-btn-font: @nord1;
     --color-search-border: @nord4;
-    --color-search-shadow: 0 2px 8px rgba(46, 52, 64, 0.15);
+    --color-search-shadow: 0 2px 8px rgba(@nord0, 0.15);
     --color-search-background: @nord6;
     --color-search-font: @nord0;
     --color-search-background-hover: @nord9;
     --color-error: @nord11;
-    --color-error-background: #f2e0e2;
+    --color-error-background: lighten(@nord11, 35%);
     --color-warning: @nord12;
-    --color-warning-background: #fcf8f6;
+    --color-warning-background: lighten(@nord12, 35%);
     --color-success: @nord14;
-    --color-success-background: #fefefe;
+    --color-success-background: lighten(@nord14, 35%);
     --color-categories-item-selected-font: @nord10;
     --color-categories-item-border-selected: @nord10;
     --color-autocomplete-font: @nord0;
     --color-autocomplete-border: @nord4;
-    --color-autocomplete-shadow: 0 2px 8px rgba(46, 52, 64, 0.1);
+    --color-autocomplete-shadow: 0 2px 8px rgba(@nord0, 0.1);
     --color-autocomplete-background: @nord6;
     --color-autocomplete-background-hover: @nord5;
     --color-answer-font: @nord1;
@@ -205,386 +500,105 @@
     --color-result-image-background: @nord6;
     --color-settings-tr-hover: @nord5;
     --color-settings-engine-description-font: @nord2;
-    --color-settings-table-group-background: rgba(76, 86, 106, 0.1);
-    --color-result-detail-font: @nord4;
-    --color-result-detail-label-font: @nord3;
-    --color-result-detail-background: @nord0;
-    --color-result-detail-hr: @nord2;
-    --color-result-detail-link: @nord8;
-    --color-result-detail-loader-border: rgba(216, 222, 233, 0.2);
-    --color-result-detail-loader-borderleft: rgba(46, 52, 64, 0);
-    --color-toolkit-badge-font: @nord6;
-    --color-toolkit-badge-background: @nord3;
-    --color-toolkit-kbd-font: @nord6;
-    --color-toolkit-kbd-background: @nord1;
-    --color-toolkit-dialog-border: @nord4;
-    --color-toolkit-dialog-background: @nord6;
-    --color-toolkit-tabs-label-border: @nord6;
-    --color-toolkit-tabs-section-border: @nord4;
-    --color-toolkit-select-background: @nord5;
-    --color-toolkit-select-border: @nord4;
-    --color-toolkit-select-background-hover: @nord4;
-    --color-toolkit-input-text-font: @nord0;
-    --color-toolkit-checkbox-onoff-off-background: @nord4;
-    --color-toolkit-checkbox-onoff-on-background: @nord9;
-    --color-toolkit-checkbox-onoff-on-mark-background: @nord14;
-    --color-toolkit-checkbox-onoff-on-mark-color: @nord6;
-    --color-toolkit-checkbox-onoff-off-mark-background: @nord11;
-    --color-toolkit-checkbox-onoff-off-mark-color: @nord6;
-    --color-toolkit-checkbox-label-background: @nord5;
-    --color-toolkit-checkbox-label-border: @nord4;
-    --color-toolkit-checkbox-input-border: @nord9;
-    --color-toolkit-engine-tooltip-border: @nord4;
-    --color-toolkit-engine-tooltip-background: @nord6;
-    --color-toolkit-loader-border: rgba(59, 66, 82, 0.2);
-    --color-toolkit-loader-borderleft: rgba(236, 239, 244, 0);
-    --color-doc-code: @nord1;
-    --color-doc-code-background: @nord5;
-    --color-bar-chart-primary: @nord8;
-    --color-bar-chart-secondary: @nord13;
-    --color-image-resolution-background: rgba(46, 52, 64, 0.5);
-    --color-image-resolution-font: @nord6;
-    --color-loading-indicator: rgba(59, 66, 82, 0.2);
-    --color-loading-indicator-gap: @nord6;
-    --color-line-number: @nord3;
+    --color-settings-table-group-background: rgba(@nord3, 0.1);
     --color-favicon-background-color: @nord5;
     --color-favicon-border-color: @nord4;
+}
+
+.dark-themes() {
+    --color-base-font: @nord4;
+    --color-base-background: @nord0;
+    --color-base-background-mobile: @nord0;
+    --color-url-font: @nord7;
+    --color-url-visited-font: @nord15;
+    --color-header-background: @header-dark;
+    --color-header-border: @nord1;
+    --color-footer-background: @nord0;
+    --color-footer-border: @nord1;
+    --color-sidebar-border: @nord3;
+    --color-sidebar-font: var(--color-base-font);
+    --color-sidebar-background: @nord1;
+    --color-backtotop-font: @nord4;
+    --color-backtotop-border: @nord1;
+    --color-backtotop-background: @nord2;
+    --color-btn-background: @nord9;
+    --color-btn-font: @nord6;
+    --color-show-btn-background: @nord3;
+    --color-show-btn-font: @nord5;
+    --color-search-border: @nord3;
+    --color-search-shadow: 0 4px 16px rgba(@nord0, 0.9);
+    --color-search-background: @nord0;
+    --color-search-font: @nord5;
+    --color-search-background-hover: @nord9;
+    --color-error: @nord11;
+    --color-error-background: @nord2;
+    --color-warning: @nord12;
+    --color-warning-background: @nord2;
+    --color-success: @nord14;
+    --color-success-background: @nord2;
+    --color-categories-item-selected-font: @nord8;
+    --color-categories-item-border-selected: @nord8;
+    --color-autocomplete-font: @nord5;
+    --color-autocomplete-border: @nord3;
+    --color-autocomplete-shadow: 0 2px 8px rgba(@nord0, 0.25);
+    --color-autocomplete-background: @nord1;
+    --color-autocomplete-background-hover: @nord2;
+    --color-answer-font: @nord4;
+    --color-answer-background: @nord1;
+    --color-result-keyvalue-col-table: @nord1;
+    --color-result-keyvalue-odd: @nord1;
+    --color-result-keyvalue-even: @nord0;
+    --color-result-background: @nord0;
+    --color-result-border: @nord1;
+    --color-result-url-font: @nord5;
+    --color-result-vim-selected: rgba(@nord2, 0.8);
+    --color-result-vim-arrow: @nord9;
+    --color-result-description-highlight-font: @nord6;
+    --color-result-link-font: @nord8;
+    --color-result-link-font-highlight: @nord7;
+    --color-result-link-visited-font: @nord12;
+    --color-result-publishdate-font: var(--color-answer-font);
+    --color-result-engines-font: @nord8;
+    --color-result-search-url-border: @nord3;
+    --color-result-search-url-font: @nord5;
+    --color-result-detail-font: @nord5;
+    --color-result-detail-label-font: @nord4;
+    --color-result-detail-background: @nord0;
+    --color-result-detail-hr: @nord3;
+    --color-result-detail-link: @nord7;
+    --color-result-detail-loader-border: rgba(@nord4, 0.2);
+    --color-result-detail-loader-borderleft: rgba(@nord0, 0);
+    --color-result-image-span-font: @nord4;
+    --color-result-image-span-font-selected: @nord0;
+    --color-result-image-background: @nord0;
+}
+
+.black-themes() {
+    --color-base-background: #000;
+    --color-base-background-mobile: #000;
+    --color-header-background: #000;
+    --color-footer-background: #000;
+    --color-sidebar-background: #000;
+    --color-search-background: #000;
+    --color-autocomplete-background: #000;
+    --color-answer-background: #000;
+    --color-result-keyvalue-even: #000;
+    --color-result-background: #000;
+    --color-result-detail-background: #000;
+    --color-result-image-background: #000;
 }
 
 :root.theme-dark {
     .dark-themes();
 }
 
-:root.theme-black,
-:root[data-theme="black"] {
+:root.theme-black {
     .dark-themes();
-    .black-theme-vars();
+    .black-themes();
 }
 
 @media (prefers-color-scheme: dark) {
-    :root.theme-auto {
+    :root:not(.theme-light) {
         .dark-themes();
     }
-}
-
-/* --- 2. STRUCTURAL OVERRIDES (Body Wrapper for Specificity) --- */
-body {
-
-    /* --- A. Removals (Minimalism) --- */
-    footer,
-    .link_on_top_about,
-    .link_on_top_donate,
-    #search_logo,
-    .title h1,
-    .dialog-warning-block,
-    #language,
-    #safesearch {
-        display: none !important;
-    }
-
-    /* --- B. Global Typography & Density --- */
-    html {
-        line-height: 1.25;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizelegibility;
-        font-variant-numeric: proportional-nums;
-    }
-
-    button,
-    input,
-    optgroup,
-    select,
-    textarea {
-        line-height: 1.25;
-        vertical-align: middle;
-    }
-
-    /* --- C. Search Box & Header --- */
-    #q::placeholder {
-        color: transparent;
-    }
-
-    #link_on_top {
-        font-size: 1.25rem;
-    }
-
-    .results_endpoint #search_view {
-        border-radius: 50px;
-        max-width: 52rem;
-        width: 100%;
-    }
-
-    #search_view .search_button {
-        width: 2rem;
-    }
-
-    /* Mobile Width Fixes */
-    #search_view {
-        max-width: 100dvw !important;
-        box-sizing: border-box;
-        padding: 0 0.5rem;
-    }
-
-    #q {
-        width: 100% !important;
-        box-sizing: border-box;
-        font-size: 16px !important;
-        /* Anti-zoom */
-    }
-
-    /* Clear Search Button (The X) */
-    html.no-js #clear_search.hide_if_nojs {
-        padding: 0.8rem 1rem;
-        font-size: 1.125rem;
-        border-top-left-radius: 50px;
-        padding-right: 1.5rem;
-        border-radius: 0 0px 0px 0;
-        border-top-right-radius: 50px;
-        margin-top: 0;
-        margin-left: 10.25rem;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        max-width: 100%;
-    }
-
-    /* --- D. Autocomplete --- */
-    .autocomplete {
-        min-width: 52rem;
-        border-radius: 0 0 25px 25px;
-        background-color: var(--color-header-background);
-        max-height: 100dvh !important;
-        overflow-y: auto;
-        box-shadow: var(--color-search-shadow);
-
-        // Mobile fixes
-        max-width: 100dvw !important;
-        box-sizing: border-box;
-        left: 0 !important;
-        right: 0 !important;
-    }
-
-    #search_view:focus-within>.search_box>.autocomplete.open {
-        display: block;
-    }
-
-    /* --- E. Results Styling --- */
-    .result {
-        border-radius: 25px;
-        background: var(--color-result-background);
-        border: 1px solid var(--color-result-border);
-    }
-
-    .result .altlink {
-        margin: 0.25rem !important;
-        display: inline-block;
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 50px;
-    }
-
-    .result div.highlight {
-        display: inline-block;
-        border-radius: 25px;
-        max-width: fit-content;
-        padding: 0.25rem;
-    }
-
-    /* Selectable URLs */
-    div.selectable_url {
-        border-radius: 25px;
-    }
-
-    div.selectable_url pre {
-        border-radius: 50px;
-    }
-
-    /* --- F. Images & Social Cards (The Complex Part) --- */
-    .result-images {
-        overflow: hidden;
-    }
-
-    .result-images img {
-        border: none;
-        width: 45vw;
-        border-radius: 25px;
-        height: fit-content;
-        object-fit: contain;
-        min-width: 0;
-    }
-
-    article.result-images .detail {
-        object-fit: scale-down;
-    }
-
-    /* Social Media Cards - Redesign */
-    article[data-vim-selected].category-social {
-        border-radius: 50px;
-        padding: 0.5rem 1rem;
-        max-width: 100%;
-        min-width: 0;
-        border-left: 0rem solid transparent;
-        font-size: 1.125rem;
-        margin: 0.125rem 0 0 0;
-        line-height: 1.25;
-        display: inline;
-        hyphens: auto;
-        overflow: hidden;
-    }
-
-    article[data-vim-selected].category-social .content {
-        font-size: 0.8rem;
-        margin-left: 0.25rem;
-    }
-
-    article[data-vim-selected].category-social img {
-        float: right;
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-        margin-left: 1rem;
-        border: none;
-        border-radius: 25px;
-        max-width: 45%;
-        max-height: 10rem;
-        min-width: 0;
-        min-height: 0;
-        object-fit: contain;
-        box-shadow: var(--color-search-shadow);
-        width: auto;
-        height: auto;
-    }
-
-    /* --- G. Sidebar & Infoboxes --- */
-    summary.title {
-        background: var(--color-header-background);
-        padding: 1.5rem;
-        margin: 0 0.5rem;
-        color: var(--color-base-font);
-        border-radius: 25px;
-        border: none;
-        text-align: end;
-        transition: opacity 0.2s;
-    }
-
-    .sidebar-collapsible {
-        background: var(--color-header-background);
-        padding: 1.5rem;
-        margin: 0.5rem 0;
-        border: none;
-        border-radius: 25px;
-    }
-
-    /* Suggestions & Infoboxes (Pill Scroll) */
-    #suggestions,
-    #infoboxes {
-        display: flex;
-    }
-
-    #suggestions .wrapper,
-    #infoboxes .wrapper {
-        display: flex;
-        width: 100%;
-        text-align: left;
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding-bottom: 0.25rem;
-    }
-
-    #suggestions .wrapper::-webkit-scrollbar {
-        display: none;
-    }
-
-    #suggestions form,
-    #infoboxes form {
-        display: inline;
-        border-radius: 50px;
-        border: 0.125rem solid #0002;
-        background: var(--color-header-background);
-        padding: 0.125rem 0.5rem;
-        margin: 0.125rem;
-    }
-
-    #suggestions input,
-    #infoboxes input {
-        color: @nord7;
-        border-radius: 0;
-    }
-
-    /* --- H. Form Elements & Inputs --- */
-    select {
-        padding: 0.25rem 0.5rem !important;
-        font-size: 16px !important;
-    }
-
-    select:focus {
-        background-size: 1.5rem;
-        border-radius: 25px;
-    }
-
-    input[type="submit"] {
-        padding: 0.2rem;
-        border-radius: 50px;
-    }
-
-    input.checkbox-onoff.reversed-checkbox[type="checkbox"]::before {
-        border-radius: 50px;
-    }
-
-    input.checkbox-onoff[type="checkbox"]::before {
-        transition: left 0.1s;
-    }
-
-    /* --- I. Categories (Tabs) --- */
-    button.category_button {
-        padding: 0.25rem 1rem 0.5rem 0.75rem;
-        text-transform: lowercase;
-        font-size: 1rem;
-    }
-
-    button.category_button.selected {
-        color: var(--color-categories-item-selected-font);
-        border-bottom: 2px solid var(--color-categories-item-border-selected);
-    }
-
-    button.category_button:active,
-    .category_checkbox label:active {
-        background-color: rgba(0, 0, 0, 0.05);
-        transition: 0s;
-        filter: brightness(0.02) blur(1.5px);
-    }
-
-    /* --- J. Settings / Preferences Table --- */
-    table tr.pref-group th {
-        border-radius: 25px;
-        padding-top: 1rem;
-        gap: 0.5rem;
-    }
-
-    /* Tooltip Hiding */
-    td:hover .engine-tooltip {
-        display: none;
-    }
-
-    /* --- K. Miscellaneous --- */
-    iframe[src^="https://genius.com/songs"] {
-        border-radius: 25px;
-    }
-
-    failed-test {
-        border-radius: 50px;
-        margin-top: 33vh;
-    }
-
-    .index_endpoint {
-        background: var(--color-header-background);
-    }
-}
-
-/* --- 3. GLOBAL UTILITIES (Outside Body) --- */
-::-webkit-scrollbar {
-    display: none;
-}
-
-html {
-    scrollbar-width: none;
 }
