@@ -13,6 +13,12 @@ Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "Simply-Nord: Full Distribution Build" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
 
+# 0. Pre-Flight Check
+if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+    Write-Error "NPM is not installed or not in PATH. Please install Node.js to compile the theme."
+    return
+}
+
 # 1. Setup Build Environment
 $TempBuild = "c:\Users\cra88y\.gemini\temp_build_final"
 if (Test-Path $TempBuild) { Remove-Item $TempBuild -Recurse -Force }
@@ -29,8 +35,18 @@ Write-Host "2. Injecting Nord & Crab LESS overrides..." -ForegroundColor Cyan
 $LessDest = Join-Path $TempBuild "client\simple\src\less"
 Copy-Item (Join-Path $RepoPath "nord-crab-overrides.less") $LessDest -Force
 
-# Inject only into style.less to avoid breaking minimal files like rss.less
-Add-Content (Join-Path $LessDest "style.less") "`n@import `"nord-crab-overrides.less`";"
+# FIX: Inject into ENTRY POINTS (ltr and rtl) to ensure it loads LAST and wins specificity
+$EntryFiles = @("style-ltr.less", "style-rtl.less")
+
+foreach ($file in $EntryFiles) {
+    $filePath = Join-Path $LessDest $file
+    if (Test-Path $filePath) {
+        Add-Content $filePath "`n@import `"nord-crab-overrides.less`";"
+        Write-Host "   Injected import into $file" -ForegroundColor Gray
+    } else {
+        Write-Warning "   Could not find entry file: $file"
+    }
+}
 
 # 4. Apply Template Overrides (Repo CrabX -> Vanilla Templates)
 Write-Host "3. Merging templates (Repo crabx -> Vanilla templates)..." -ForegroundColor Green
@@ -40,6 +56,8 @@ if (Test-Path $TemplateSource) {
     Get-ChildItem -Path $TemplateSource | ForEach-Object {
         Copy-Item $_.FullName -Destination $TemplateDest -Recurse -Force
     }
+} else {
+    Write-Warning "   No custom templates found at $TemplateSource. Skipping template merge."
 }
 
 # 5. Build CSS
@@ -52,6 +70,9 @@ try {
         npm install --quiet
     }
     npm run build
+}
+catch {
+    Write-Error "Build failed. Check the NPM output above."
 }
 finally { Pop-Location }
 
@@ -97,11 +118,8 @@ Get-ChildItem -Path $BuiltStatic -Filter "*.css" | ForEach-Object {
 if (Test-Path (Join-Path $BuiltStatic "sxng-core.min.js")) {
     Copy-Item (Join-Path $BuiltStatic "sxng-core.min.js") (Join-Path $OutJs "searxng.min.js") -Force
 }
-# Restore legacy head script from Repo if build doesn't provide it
-if (Test-Path (Join-Path $RepoPath "crabx-static\js\searxng.head.min.js")) {
-    Copy-Item (Join-Path $RepoPath "crabx-static\js\searxng.head.min.js") $OutJs -Force
-}
-# Copy chunks and other JS
+
+# Copy chunks and other JS (Modern builds rely on these)
 if (Test-Path (Join-Path $BuiltStatic "chunk")) {
     Copy-Item (Join-Path $BuiltStatic "chunk") $OutJs -Recurse -Force
 }
