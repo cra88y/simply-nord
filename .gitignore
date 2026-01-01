@@ -197,3 +197,7 @@ cython_debug/
 searxng-vanilla/
 node_modules/
 build_error.log
+
+.txt
+.gemini/
+.cursorignore
