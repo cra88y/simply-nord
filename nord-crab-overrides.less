@@ -1,6 +1,6 @@
 /* ==========================================================================
-   NORD CRAB OVERRIDES - V7 TITANIUM MASTER
-   Logic: Master Structure + Diff Values + Alignment Sync + UI Fixes
+   NORD CRAB OVERRIDES - V11 FINAL PARITY
+   Logic: Master Structure + Diff Values + Video Layout Fix + Image Grid
    ========================================================================== */
 
 /* --- 0. DEFINITIONS & VARIABLES --- */
@@ -22,9 +22,8 @@
 @nord15: #b48ead;
 @header-dark: #1d2128;
 
-/* Layout Variables - SYNCHRONIZED */
+/* Layout Variables */
 @results-width: 48rem;
-/* Slightly wider for "fullscreen" feel */
 @results-sidebar-width: 22rem;
 @results-offset: 10rem;
 @results-gap: 4rem;
@@ -33,6 +32,7 @@
 
 /* --- 1. GLOBAL STRUCTURAL BASE --- */
 html {
+    scroll-behavior: smooth !important;
     line-height: 1.25 !important;
     -webkit-font-smoothing: antialiased !important;
     text-rendering: optimizelegibility !important;
@@ -66,7 +66,7 @@ footer,
     display: none !important;
 }
 
-/* --- 3. SEARCH HEADER & BOX (Fixed Alignment & Cog) --- */
+/* --- 3. SEARCH HEADER & BOX --- */
 #search_header {
     padding-top: 1rem !important;
     padding-bottom: 0.5rem !important;
@@ -74,7 +74,6 @@ footer,
     border-bottom: none !important;
     background: var(--color-header-background) !important;
     width: 100% !important;
-    /* FIX: Pushes settings cog to the right */
     justify-content: space-between !important;
 
     @media screen and (max-width: 50em) {
@@ -84,7 +83,6 @@ footer,
     }
 }
 
-/* Container for search box to ensure centering */
 .search_box {
     border-radius: 50px !important;
     max-width: @search-width !important;
@@ -94,7 +92,6 @@ footer,
     display: flex !important;
     align-items: center !important;
     position: relative !important;
-    /* For Autocomplete positioning */
 }
 
 #q {
@@ -112,10 +109,8 @@ footer,
     }
 }
 
-/* FIX: Clear Button Visibility */
 #clear_search {
     display: block !important;
-    /* Force visible */
     width: 2.5rem !important;
     height: 100% !important;
     border-radius: 0 !important;
@@ -130,7 +125,9 @@ footer,
         display: block !important;
     }
 
-    /* Override JS hiding */
+    &:hover {
+        color: var(--color-search-background-hover) !important;
+    }
 }
 
 #send_search {
@@ -141,20 +138,23 @@ footer,
     border: none !important;
     background: var(--color-search-background) !important;
     cursor: pointer !important;
+
+    &:hover {
+        background-color: var(--color-search-background-hover) !important;
+        color: var(--color-search-background) !important;
+    }
 }
 
-/* FIX: Mobile Symmetry */
 #search_view {
     @media screen and (max-width: 50em) {
         max-width: 100% !important;
         width: 100% !important;
         box-sizing: border-box;
         padding: 0 0.5rem !important;
-        /* Even padding on both sides */
     }
 }
 
-/* --- 4. CATEGORY TABS (Aligned) --- */
+/* --- 4. CATEGORY TABS --- */
 button.category_button {
     text-transform: lowercase !important;
     font-size: 1rem !important;
@@ -169,12 +169,10 @@ button.category_button {
 
     &:active {
         background-color: rgba(0, 0, 0, 0.05) !important;
-        transition: 0s;
-        filter: brightness(0.02) blur(1.5px);
+        transition: background 0s;
     }
 }
 
-/* FIX: Alignment Sync */
 .search_filters,
 #categories {
     margin-left: @results-offset !important;
@@ -191,19 +189,16 @@ button.category_button {
 
     @media screen and (max-width: 50em) {
         margin-left: 0 !important;
-        /* Reset for mobile */
         padding: 0 0.5rem !important;
-        /* Match search box padding */
         width: 100% !important;
     }
 }
 
-/* --- 5. SUGGESTIONS (Aligned + Shadow) --- */
+/* --- 5. SUGGESTIONS --- */
 #suggestions {
     display: flex !important;
     flex-direction: column !important;
     padding: 0 !important;
-    /* FIX: Sync Alignment */
     margin: 0.5rem 0 0.5rem @results-offset !important;
     width: @results-width !important;
     max-width: 100% !important;
@@ -242,7 +237,7 @@ button.category_button {
             display: inline-block !important;
             flex: 0 0 auto !important;
             border-radius: 50px !important;
-            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+            border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
             background: var(--color-header-background) !important;
             padding: 0.25rem 0.75rem !important;
             margin: 0.125rem !important;
@@ -261,7 +256,7 @@ button.category_button {
     }
 }
 
-/* --- 6. RESULTS LAYOUT (Grid & Alignment) --- */
+/* --- 6. RESULTS LAYOUT --- */
 #results {
     margin-top: 0.5rem !important;
     margin-left: @results-offset !important;
@@ -281,7 +276,6 @@ button.category_button {
         margin-left: 0 !important;
         margin-right: 0 !important;
         padding: 0 0.5rem !important;
-        /* Match search box padding */
         grid-template:
             "header" min-content
             "corrections" min-content
@@ -304,21 +298,25 @@ button.category_button {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 
     h3 {
-        font-size: 1.2rem !important;
-        margin: 0 0 0.25rem 0 !important;
+        font-size: 1.125rem !important;
+        margin: 0.125rem 0 0.25rem 0 !important;
         line-height: 1.3 !important;
+
+        a {
+            font-size: 1.1em !important;
+            font-weight: normal !important;
+        }
     }
 
     .content {
-        font-size: 0.95em !important;
-        line-height: 1.4 !important;
+        font-size: 0.9em !important;
+        line-height: 1.25 !important;
         color: var(--color-base-font) !important;
     }
 
     img.thumbnail {
         float: right !important;
         border-radius: 15px !important;
-        /* Slightly tighter radius for thumbs */
         box-shadow: var(--color-search-shadow) !important;
         max-width: 35% !important;
         max-height: 8rem !important;
@@ -352,7 +350,6 @@ button.category_button {
     height: 1.25rem !important;
     width: 1.25rem !important;
     border-radius: 4px !important;
-    /* Chiclet style */
     background-color: var(--color-favicon-background-color) !important;
     border: 1px solid var(--color-favicon-border-color) !important;
     display: inline-block !important;
@@ -360,7 +357,7 @@ button.category_button {
     margin-right: 0.5rem !important;
 }
 
-/* --- 8. SPECIAL RESULT TYPES (Text Bottom & Truncation) --- */
+/* --- 8. SPECIAL RESULT TYPES --- */
 
 /* Image Grouping */
 .template_group_images {
@@ -374,7 +371,7 @@ button.category_button {
     }
 }
 
-/* Images Page */
+/* Images Page - 5 Per Row Desktop, 2 Per Row Mobile */
 .result-images {
     border-radius: 20px !important;
     padding: 0 !important;
@@ -383,11 +380,12 @@ button.category_button {
     overflow: hidden !important;
     display: inline-block !important;
     vertical-align: top !important;
-    margin: 0.25rem !important;
+    margin: 0.5% !important;
     box-shadow: none !important;
-    /* Images don't need card shadow */
 
-    /* FIX: Text at bottom & Truncated */
+    /* Desktop: 5 per row */
+    width: 19% !important;
+
     &>a {
         display: flex !important;
         flex-direction: column !important;
@@ -396,10 +394,11 @@ button.category_button {
 
     img {
         border-radius: 20px !important;
-        object-fit: cover !important;
+        object-fit: contain !important;
         border: none !important;
-        height: @results-image-row-height !important;
-        width: auto !important;
+        width: 100% !important;
+        height: 15rem !important;
+        background: rgba(0, 0, 0, 0.1) !important;
     }
 
     span.title {
@@ -418,41 +417,57 @@ button.category_button {
         display: none !important;
     }
 
-    /* Cleaner look */
-
+    /* Mobile: 2 per row */
     @media screen and (max-width: 50em) {
         width: 48% !important;
         margin: 1% !important;
-        height: auto !important;
 
         img {
-            width: 100% !important;
             height: 10rem !important;
-            object-fit: cover !important;
         }
     }
 }
 
-/* Videos - Text Bottom */
+/* Videos - Image Left, Text Right (FIXED) */
 .result-videos {
-    display: flex !important;
-    flex-direction: column !important;
+    display: block !important;
+    /* Reset flex to allow float */
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+    background: var(--color-result-background) !important;
+    border-radius: 25px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden !important;
+    /* Clear floats */
 
     img.thumbnail {
-        border-radius: 20px !important;
-        border: none !important;
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        float: left !important;
+        width: 20rem !important;
+        max-width: 40% !important;
         height: auto !important;
-        margin: 0 0 0.5rem 0 !important;
+        margin-right: 1.5rem !important;
+        margin-bottom: 0.5rem !important;
+        border-radius: 15px !important;
+        object-fit: cover !important;
+    }
+
+    h3 {
+        margin-top: 0 !important;
     }
 
     .content {
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        overflow: hidden !important;
+    }
+
+    /* Mobile: Stack them */
+    @media screen and (max-width: 50em) {
+        img.thumbnail {
+            float: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-right: 0 !important;
+            margin-bottom: 1rem !important;
+        }
     }
 }
 
@@ -478,6 +493,16 @@ button.category_button {
     margin: 0 0 1rem 0 !important;
 }
 
+/* FIX: Response Time / Stats Block - Make Transparent */
+#sidebar .infobox:has(.engines),
+#sidebar div[class*="stat"] {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: right !important;
+}
+
 #sidebar .infobox img {
     float: none !important;
     display: block !important;
@@ -496,22 +521,20 @@ button.category_button {
     padding-left: 0 !important;
 }
 
-/* --- 10. AUTOCOMPLETE (FIXED: Visibility) --- */
+/* --- 10. AUTOCOMPLETE --- */
 .autocomplete {
     position: absolute !important;
-    /* FIX: Forces overlay */
     top: 100% !important;
     left: 0 !important;
     right: 0 !important;
     z-index: 99999 !important;
-    /* FIX: Always on top */
 
     min-width: 100% !important;
     border-radius: 0 0 25px 25px !important;
     border: none !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     background-color: var(--color-header-background) !important;
-    max-height: 60vh !important;
+    max-height: 100dvh !important;
     overflow-y: auto !important;
     margin-top: 0.5rem !important;
 
@@ -634,6 +657,14 @@ iframe[src^="https://genius.com/songs"] {
     --color-settings-table-group-background: rgba(@nord3, 0.1);
     --color-favicon-background-color: @nord5;
     --color-favicon-border-color: @nord4;
+    /* Detail Modal (Light Theme) */
+    --color-result-detail-font: @nord4;
+    --color-result-detail-label-font: @nord3;
+    --color-result-detail-background: @nord0;
+    --color-result-detail-hr: @nord2;
+    --color-result-detail-link: @nord8;
+    --color-result-detail-loader-border: rgba(@nord4, 0.2);
+    --color-result-detail-loader-borderleft: rgba(@nord0, 0);
 }
 
 .dark-themes() {
@@ -731,5 +762,89 @@ iframe[src^="https://genius.com/songs"] {
 @media (prefers-color-scheme: dark) {
     :root:not(.theme-light) {
         .dark-themes();
+    }
+}
+
+.bar-chart-bar {
+    border-radius: 50px !important;
+}
+
+/* 3. Search & Autocomplete Focus Logic (Mobile & Desktop) */
+/* Explicit connection between search focus and autocomplete visibility */
+#search_view:focus-within>.search_box>.autocomplete.open {
+    display: block !important;
+}
+
+@media screen and (max-width: 50em) {
+
+    /* Mobile Search Overlay Fix */
+    #search_view:focus-within {
+        display: block !important;
+        background-color: var(--color-header-background) !important;
+        position: absolute !important;
+        top: 0 !important;
+        height: 100% !important;
+        max-width: 100dvw !important;
+        /* Prevent horizontal spill */
+        width: 100% !important;
+        z-index: 2000 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        border-radius: 0 0 25px 25px !important;
+
+        &::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        .search_box {
+            border-bottom: 1px solid var(--color-search-border) !important;
+            width: 100% !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+    }
+
+    /* Autocomplete Mobile Width Constraint */
+    .autocomplete {
+        min-width: 100% !important;
+        /* Force full width on mobile */
+        border-radius: 0 0 25px 25px !important;
+    }
+}
+
+/* 4. Subtle Spacing Adjustments */
+.search_filters {
+    margin-left: (@results-offset + 0.25rem) !important;
+    /* Specific tweak from the high-context diff */
+}
+
+
+/* Snappy Widget Interactions */
+input.checkbox-onoff[type="checkbox"]::before {
+    transition: left 0.1s !important;
+}
+
+/* Toolkit Refinements */
+select {
+    padding: 0.25rem 0.5rem !important;
+    background-size: 1.5rem !important;
+}
+
+/* Image Detail Polish (Merged) */
+#results.image-detail-open article.result-images[data-vim-selected] .detail {
+    padding: 4rem 3rem 3rem 3rem !important;
+    border: none !important;
+
+    a.result-images-source img {
+        object-fit: scale-down !important;
+    }
+
+    .loader {
+        position: absolute !important;
+        top: 1rem !important;
+        right: 50% !important;
     }
 }
