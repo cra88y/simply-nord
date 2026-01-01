@@ -466,6 +466,20 @@ input[type="checkbox"] {
     appearance: none;
 }
 
+select {
+    padding: 0.25rem 0.5rem !important;
+    background-position: right 0.5rem center !important;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    line-height: 1.25 !important;
+    vertical-align: middle !important;
+}
+
 footer,
 .link_on_top_about,
 .link_on_top_donate,
@@ -529,11 +543,24 @@ footer,
 
     #suggestions {
         margin: 0 !important;
+        display: flex !important;
 
-        /* Remove margin to align with grid */
         .wrapper {
             padding: 0 !important;
-            /* Remove inner padding to align with grid */
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            width: 100% !important;
+
+            form {
+                /* Force button look on mobile */
+                display: inline-block !important;
+                flex: 0 0 auto !important;
+                /* prevent shrinking/growing */
+                width: auto !important;
+                margin: 0.25rem !important;
+                background: @nord1 !important;
+            }
         }
     }
 
@@ -553,10 +580,19 @@ footer,
         font-size: 16px !important;
     }
 
-    .result-images img {
-        width: 45vw !important;
-        height: auto !important;
-        max-height: @results-image-row-height-phone !important;
+    .result-images {
+        max-width: fit-content !important;
+
+        img {
+            width: 45vw !important;
+            border-radius: 25px !important;
+            height: fit-content !important;
+            /* Legacy behavior */
+            object-fit: contain !important;
+            min-width: 0 !important;
+            max-height: none !important;
+            /* Remove constraints allowing text overlap */
+        }
     }
 
     #search_view:focus-within {
