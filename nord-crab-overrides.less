@@ -367,19 +367,26 @@ article[data-vim-selected] {
 /* --- 8. Suggestions & Related Searches --- */
 #suggestions {
     display: flex !important;
+    flex-direction: column !important;
     padding: 0 !important;
-    /* Remove vertical padding to help alignment */
     margin: 0.5rem 0 !important;
     grid-area: header;
+    width: @results-width !important;
+    max-width: 100% !important;
 
     .wrapper {
         display: flex !important;
+        flex-direction: row !important;
         flex-wrap: nowrap !important;
-        /* Force single row */
+        justify-content: flex-start !important;
+        align-items: center !important;
         width: 100% !important;
+        min-width: 0 !important;
+        /* Critical for flex overflow */
         text-align: left !important;
         overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
         scrollbar-width: none;
         padding: 0 !important;
 
@@ -389,7 +396,9 @@ article[data-vim-selected] {
 
         form {
             display: inline-block !important;
-            flex-shrink: 0 !important;
+            flex: 0 0 auto !important;
+            width: auto !important;
+            max-width: max-content !important;
             border-radius: 50px !important;
             border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
             background: var(--color-header-background) !important;
@@ -571,22 +580,12 @@ footer,
 
     #suggestions {
         margin: 0.5rem 0 !important;
-        display: flex !important;
+        width: 100% !important;
 
         .wrapper {
-            padding: 0 !important;
-            display: flex !important;
-            flex-wrap: nowrap !important;
-            overflow-x: auto !important;
             width: 100% !important;
 
             form {
-                display: inline-block !important;
-                flex: 0 0 auto !important;
-                width: auto !important;
-                margin: 0.125rem !important;
-                padding: 0.125rem 0.5rem !important;
-                border-radius: 50px !important;
                 background: var(--color-header-background) !important;
             }
         }
