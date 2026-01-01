@@ -195,7 +195,5 @@ cython_debug/
 .cursorignore
 # Simply-Nord Build & Theme Artifacts
 searxng-vanilla/
-out/
 node_modules/
-.gemini/
 build_error.log

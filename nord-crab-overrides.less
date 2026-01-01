@@ -149,6 +149,8 @@ button.category_button {
     margin-left: @results-offset !important;
     gap: 0 @results-gap !important;
     display: grid !important;
+    padding: 0 !important;
+    /* Legacy padding 0 */
     grid-template:
         "header sidebar" min-content
         "corrections sidebar" min-content
@@ -315,13 +317,24 @@ article[data-vim-selected] {
 }
 
 /* --- 7. Sidebar & Answers --- */
-#answers,
+#answers {
+    border-radius: 25px !important;
+    background: var(--color-header-background) !important;
+    padding: 1.5rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 0.5rem !important;
+    /* Legacy margin */
+}
+
 #sidebar .infobox {
     border-radius: 25px !important;
     background: var(--color-header-background) !important;
     padding: 1.5rem !important;
     border: none !important;
     box-shadow: none !important;
+    margin: 0.5rem 0 !important;
+    /* Legacy spacing between infoboxes */
 }
 
 #sidebar .infobox img {
@@ -377,20 +390,17 @@ article[data-vim-selected] {
         form {
             display: inline-block !important;
             flex-shrink: 0 !important;
-            /* Don't squash buttons */
             border-radius: 50px !important;
-            border: none !important;
-            /* "Less borders" per user request */
-            background: @nord1 !important;
-            /* Darker, stylized background */
-            padding: 0.25rem 0.75rem !important;
-            margin: 0.25rem !important;
+            border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
+            background: var(--color-header-background) !important;
+            padding: 0.125rem 0.5rem !important;
+            margin: 0.125rem !important;
             cursor: pointer !important;
             white-space: nowrap !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 
             &:hover {
                 background: var(--color-btn-background) !important;
+                border-color: transparent !important;
 
                 input {
                     color: var(--color-btn-font) !important;
@@ -398,16 +408,14 @@ article[data-vim-selected] {
             }
 
             input[type="submit"] {
-                color: @nord6 !important;
-                /* Light text on dark button */
+                color: @nord7 !important;
                 background: transparent !important;
                 border: none !important;
-                font-size: 0.85rem !important;
+                font-size: 0.9em !important;
                 cursor: pointer !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                text-transform: lowercase !important;
-                font-weight: 500 !important;
+                width: auto !important;
             }
         }
     }
@@ -420,6 +428,17 @@ article[data-vim-selected] {
 
 .index_endpoint {
     background: var(--color-header-background) !important;
+}
+
+/* Titles for suggestions, infoboxes, etc */
+#infoboxes .title,
+#suggestions .title,
+#search_url .title,
+#engines_msg .title,
+#apis .title {
+    margin: 0 0 0.25em 0.5rem !important;
+    color: var(--color-base-font) !important;
+    font-weight: bold !important;
 }
 
 /* --- 10. Autocomplete Functional Overrides --- */
@@ -520,13 +539,22 @@ footer,
 /* --- 13. Responsive & Mobile --- */
 @media screen and (max-width: @phone) {
     #search_header {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0.1rem 0 0 0 !important;
+        gap: 0 0 !important;
+        grid-template-areas:
+            "logo search"
+            "categories categories" !important;
+    }
+
+    .search_logo {
+        padding: 0 !important;
     }
 
     #results {
         margin-left: 0 !important;
-        padding: 0 0.5rem !important;
+        padding: 0 !important;
         grid-template:
             "header" min-content
             "corrections" min-content
@@ -542,7 +570,7 @@ footer,
     }
 
     #suggestions {
-        margin: 0 !important;
+        margin: 0.5rem 0 !important;
         display: flex !important;
 
         .wrapper {
@@ -553,13 +581,13 @@ footer,
             width: 100% !important;
 
             form {
-                /* Force button look on mobile */
                 display: inline-block !important;
                 flex: 0 0 auto !important;
-                /* prevent shrinking/growing */
                 width: auto !important;
-                margin: 0.25rem !important;
-                background: @nord1 !important;
+                margin: 0.125rem !important;
+                padding: 0.125rem 0.5rem !important;
+                border-radius: 50px !important;
+                background: var(--color-header-background) !important;
             }
         }
     }
@@ -587,11 +615,18 @@ footer,
             width: 45vw !important;
             border-radius: 25px !important;
             height: fit-content !important;
-            /* Legacy behavior */
             object-fit: contain !important;
             min-width: 0 !important;
             max-height: none !important;
-            /* Remove constraints allowing text overlap */
+        }
+
+        /* Fix text overlap by ensuring block display below image */
+        span.title,
+        span.source {
+            display: block !important;
+            width: 100% !important;
+            padding-top: 0.25rem !important;
+            font-size: 0.9rem !important;
         }
     }
 
