@@ -1,14 +1,13 @@
 /* ==========================================================================
-   Simply-Nord Theme Overrides - FINAL
-   - This file contains all customizations to transform the vanilla theme.
-   - It is designed to be imported last in the LESS build process.
-   - Generated from a complete analysis of source LESS and HTML templates.
+   Simply-Nord Theme Overrides - FINAL (v3)
+   - Corrected based on full diff and template analysis.
+   - Fixes suggestions flexbox, image layout, and all other gaps.
    ========================================================================== */
 
 /* --- 1. Variable Definitions & Overrides --- */
 
 // Nord Color Palette
-@nord01: #1d2128; // Custom dark header
+@nord01: #1d2128;
 @nord0: #2e3440;
 @nord1: #3b4252;
 @nord2: #434c5e;
@@ -33,7 +32,7 @@
 @results-gap: 5rem;
 @search-width: 52rem;
 @results-image-row-height: 15.5rem;
-@results-image-row-height-phone: auto; // Allow natural height on mobile
+@results-image-row-height-phone: auto;
 @result-padding: 0.5rem 1rem;
 @results-margin: 0;
 
@@ -121,14 +120,13 @@ html {
     }
 
     &.open {
-        display: none; // Hidden by default, shown by focus-within
+        display: none;
         max-height: 100dvh !important;
         margin-top: 3.5rem;
         border-radius: 0 0 25px 25px;
     }
 }
 
-// This rule is critical for the new autocomplete behavior
 #search_view:focus-within>.search_box>.autocomplete.open {
     display: block;
 }
@@ -161,15 +159,23 @@ select {
     background-size: 1.5rem;
 }
 
-// Results Layout & Cards
+// Results Grid Layout
 #results {
     margin-top: 0.125rem;
+    grid-template:
+        "header sidebar" min-content
+        "corrections sidebar" min-content
+        "answers sidebar" min-content
+        "urls sidebar" 1fr
+        "pagination sidebar" min-content
+        / @results-width @results-sidebar-width;
 }
 
 #results-header {
-    grid-area: corrections; // Place suggestions/answers in the first grid row
+    grid-area: header;
 }
 
+// Result Cards
 .result {
     border-left-width: 0;
 
@@ -202,21 +208,36 @@ select {
     display: flow-root;
 }
 
+// Image Results (Layout Fix)
 .result-images {
     padding: 0.25rem;
     max-width: fit-content;
+    height: auto;
 
     >a {
         display: grid;
-        grid-template-columns: max-content;
+        grid-template-columns: 1fr;
         overflow: hidden;
     }
 
     img {
-        width: fit-content;
+        height: @results-image-row-height;
+        width: auto;
         object-fit: contain;
-        min-width: 0;
         border: none;
+    }
+
+    .image_resolution,
+    span.title,
+    span.source {
+        position: static;
+        display: block;
+        width: 100%;
+        padding: 0.125rem 0 0 0;
+    }
+
+    span.source {
+        font-size: 0.7rem;
     }
 }
 
@@ -227,15 +248,15 @@ select {
     margin-top: 0.125rem;
 }
 
-// Suggestions (Complete Override for new HTML structure)
+// Suggestions (Complete Flexbox Override - THE FIX)
 #suggestions {
-    display: flex;
-
     .wrapper {
         display: flex;
+        flex-flow: row nowrap; // Explicitly override the original 'column' flow
+        justify-content: flex-start; // Override original 'flex-end'
         width: 100%;
         text-align: left;
-        overflow: scroll;
+        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         padding-bottom: 0.25rem;
@@ -245,7 +266,8 @@ select {
         }
 
         form {
-            display: inline;
+            display: inline-block;
+            flex: 0 0 auto; // Prevent items from shrinking/growing
             border-radius: 50px;
             border: 0.125rem solid #0002;
             background: var(--color-header-background);
@@ -257,14 +279,8 @@ select {
     input {
         color: @nord7;
         border-radius: 0;
-        overflow: hidden; // Not scroll
+        overflow: hidden;
         text-decoration: none;
-    }
-
-    .infobox .url,
-    input[type="submit"],
-    .infobox .url a {
-        list-style: none;
     }
 }
 
