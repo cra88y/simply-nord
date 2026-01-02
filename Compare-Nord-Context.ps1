@@ -86,7 +86,7 @@ if ($CssArchive -and $CssCrab) {
     
     if (Get-Command git -ErrorAction SilentlyContinue) {
         # --no-color for LLM readability, --unified=3 for context
-        git diff --no-index --no-color --unified=3 $CssArchive $CssCrab > $ReportFile
+        git diff --no-index --no-color --unified=25 $CssArchive $CssCrab > $ReportFile
     } else {
         diff $CssArchive $CssCrab > $ReportFile
     }

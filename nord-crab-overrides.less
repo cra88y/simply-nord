@@ -1,6 +1,6 @@
 /* ==========================================================================
-   NORD CRAB OVERRIDES - V11 FINAL PARITY
-   Logic: Master Structure + Diff Values + High Specificity + 3-Tier Responsive
+   NORD CRAB OVERRIDES - V13 (DIFF-DERIVED MASTER)
+   Source: Direct translation of the provided git diff.
    ========================================================================== */
 
 /* --- 0. DEFINITIONS & VARIABLES --- */
@@ -22,562 +22,340 @@
 @nord15: #b48ead;
 @header-dark: #1d2128;
 
-/* Layout Variables */
-@results-width: 48rem;
-@results-sidebar-width: 22rem;
+/* Layout Variables from Diff */
+@results-width: 45rem;
+@results-sidebar-width: 25rem;
 @results-offset: 10rem;
-@results-gap: 4rem;
+@results-gap: 5rem;
 @search-width: 52rem;
 @results-image-row-height: 15.5rem;
-@results-margin: 0.5rem;
-/* Increased for "card" breathing room */
-@results-padding: 0.8rem 1.1rem;
-/* Precise breathing room */
-@results-padding-categories: 0.25rem 1rem 0.5rem 0.75rem;
-@results-line-height: 1.3;
 
-/* --- SPECIFICITY WRAPPED RULES --- */
+/* --- 1. GLOBAL STYLES & REMOVALS --- */
 html {
-    scroll-behavior: smooth !important;
-    line-height: 1.25 !important;
-    -webkit-font-smoothing: antialiased !important;
-    text-rendering: optimizelegibility !important;
+    line-height: 1.25;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
     font-variant-numeric: proportional-nums;
-    background-color: var(--color-base-background) !important;
-    overflow-x: hidden !important;
-    width: 100% !important;
-    max-width: 100vw !important;
+}
 
-    input[type="checkbox"],
-    input[type="radio"] {
-        accent-color: @nord9 !important;
-        /* Nord Frost Blue */
+footer,
+.link_on_top_about,
+.link_on_top_donate,
+#search_logo,
+.title h1,
+.dialog-warning-block,
+#language,
+#safesearch {
+    display: none !important;
+}
+
+#link_on_top {
+    font-size: 1.25rem;
+}
+
+#q::placeholder {
+    color: transparent;
+}
+
+/* --- 2. SEARCH HEADER & BOX --- */
+#search_header {
+    padding-top: 1rem;
+    gap: 0.5rem;
+    border-bottom: none;
+}
+
+.search_box {
+    border-radius: 50px;
+    max-width: @search-width;
+}
+
+#q {
+    padding: 0.8rem 1rem;
+    font-size: 1.125rem;
+    border-top-left-radius: 50px;
+}
+
+#clear_search {
+    width: 2rem;
+}
+
+#send_search {
+    padding-right: 1.5rem;
+    border-radius: 0 0px 0px 0;
+    border-top-right-radius: 50px;
+}
+
+/* --- 3. CATEGORIES & SUGGESTIONS --- */
+button.category_button {
+    padding: 0.25rem 1rem 0.5rem 0.75rem;
+    text-transform: lowercase;
+    font-size: 1rem;
+
+    &.selected {
+        color: var(--color-categories-item-selected-font);
+        border-bottom: 2px solid var(--color-categories-item-border-selected);
     }
 
-    /* Enforce Pill Buttons */
-    button,
-    .button,
-    input[type="submit"] {
-        border-radius: 50px !important;
-    }
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box !important;
-    }
-
-    body {
-        line-height: 1.25 !important;
-        background-color: var(--color-base-background) !important;
-        color: var(--color-base-font) !important;
-        min-height: 100vh !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow-x: hidden !important;
-        /* Prevent scrollbar shift */
-
-        /* --- 1. GLOBAL BASE --- */
-        button,
-        input,
-        optgroup,
-        select,
-        textarea {
-            line-height: 1.25 !important;
-            vertical-align: middle !important;
-        }
-
-        .sxng-icon-set-small {
-            transform: scale(0.8) !important;
-            vertical-align: middle !important;
-        }
-
-        /* --- 2. VISUAL REMOVALS --- */
-        footer,
-        .link_on_top_about,
-        .link_on_top_donate,
-        #search_logo,
-        .logo,
-        .title h1,
-        .dialog-warning-block,
-        #language,
-        #safesearch {
-            display: none !important;
-        }
-
-        /* --- 3. SEARCH HEADER & BOX --- */
-        #search_header {
-            padding-top: 1rem !important;
-            padding-bottom: 0.5rem !important;
-            gap: 0.5rem !important;
-            background: var(--color-header-background) !important;
-            border-bottom: none !important;
-            /* No Border */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
-            /* Top Glow */
-            width: 100% !important;
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            /* Vertically Center Gear */
-
-            @media screen and (max-width: 50em) {
-                margin: 0 !important;
-                padding: 0.5rem 0.5rem 0 0.5rem !important;
-                flex-wrap: wrap !important;
-                /* Allow wrapping for mobile */
-                box-shadow: none !important;
-                justify-content: center !important;
-                /* Center Search */
-            }
-        }
-
-        .search_box {
-            border-radius: 50px !important;
-            max-width: @search-width !important;
-            border: none !important;
-            box-shadow: var(--color-search-shadow) !important;
-            width: 100%;
-            display: flex !important;
-            align-items: center !important;
-            position: relative !important;
-        }
-
-        #q {
-            border-radius: 50px 0 0 50px !important;
-            padding: 0.8rem 0.6rem !important;
-            /* Tighter text start */
-            font-size: 1.125rem !important;
-            border: none !important;
-            width: auto !important;
-            flex: 1 !important;
-            /* Flex grow to fill space */
-            background: var(--color-search-background) !important;
-            color: var(--color-search-font) !important;
-
-            &::placeholder {
-                color: transparent !important;
-            }
-        }
-
-        #clear_search {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 2.5rem !important;
-            background: var(--color-search-background) !important;
-            border: none !important;
-            color: var(--color-search-font) !important;
-            cursor: pointer !important;
-            padding: 0 !important;
-            height: auto !important;
-            align-self: stretch !important;
-            /* Match input height exactly */
-            pointer-events: auto !important;
-            z-index: 1000 !important;
-
-            &:hover {
-                color: var(--color-search-background-hover) !important;
-            }
-        }
-
-        #clear_search.empty {
-            display: none !important;
-        }
-
-        #send_search {
-            border-radius: 0 50px 50px 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            border: none !important;
-            background: var(--color-search-background) !important;
-            cursor: pointer !important;
-            align-self: stretch !important;
-            /* Match height */
-            display: flex !important;
-            align-items: center !important;
-
-            &:hover {
-                background-color: var(--color-search-background-hover) !important;
-                color: var(--color-search-background) !important;
-            }
-        }
-
-        /* --- 4. CATEGORY TABS --- */
-        button.category_button {
-            text-transform: none !important;
-            /* No forced lowercase */
-            font-size: 1rem !important;
-            padding: @results-padding-categories !important;
-            border-bottom: 2px solid transparent !important;
-            white-space: nowrap !important;
-
-            &.selected {
-                color: var(--color-categories-item-selected-font) !important;
-                border-bottom: 2px solid var(--color-categories-item-border-selected) !important;
-            }
-        }
-
-        .search_filters,
-        #categories {
-            margin-left: @results-offset !important;
-            display: flex !important;
-            flex-wrap: nowrap !important;
-            overflow-x: auto !important;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-
-            &::-webkit-scrollbar {
-                display: none !important;
-            }
-
-            @media screen and (max-width: 50em) {
-                margin-left: 0 !important;
-                padding: 0 0.5rem !important;
-                justify-content: flex-start !important;
-                /* Left align like results */
-                flex-wrap: nowrap !important;
-                /* Force Scroll */
-                overflow-x: auto !important;
-            }
-        }
-
-        /* --- 5. SUGGESTIONS --- */
-        #suggestions {
-            margin: 0.5rem 0 0.5rem @results-offset !important;
-            width: @results-width !important;
-            max-width: 100% !important;
-
-            @media screen and (max-width: 60em) {
-                width: 100% !important;
-                margin: 0.5rem 0 !important;
-                padding: 0 0.5rem !important;
-            }
-
-            .wrapper {
-                display: flex !important;
-                flex-wrap: nowrap !important;
-                justify-content: flex-start !important;
-                overflow-x: auto !important;
-                overflow-x: auto !important;
-                scrollbar-width: none !important;
-
-                &::-webkit-scrollbar {
-                    display: none !important;
-                }
-
-                form {
-                    display: inline-flex !important;
-                    flex: 0 0 auto !important;
-                    white-space: nowrap !important;
-                    width: auto !important;
-                    border-radius: 50px !important;
-                    border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
-                    background: var(--color-header-background) !important;
-                    padding: 0.2rem 0.8rem !important;
-                    /* Breeding room */
-                    margin: 0.125rem !important;
-                    box-shadow: none !important;
-
-                    input[type="submit"] {
-                        color: @nord7 !important;
-                        background: transparent !important;
-                        font-weight: bold !important;
-                        font-size: 0.9rem !important;
-                    }
-                }
-            }
-        }
-
-        /* --- 6. RESULTS LAYOUT --- */
-        #results {
-            margin-top: 0.5rem !important;
-            margin-left: @results-offset !important;
-            padding: 0 !important;
-            gap: 0 @results-gap !important;
-            display: grid !important;
-            grid-template:
-                "header sidebar" min-content
-                "corrections sidebar" min-content
-                "answers sidebar" min-content
-                "urls sidebar" 1fr
-                "pagination sidebar" min-content
-                / 1fr @results-sidebar-width !important;
-
-            @media screen and (max-width: 60em) {
-                /* Tablet Tier - STACKED like mobile */
-                margin-left: 0.5rem !important;
-                padding: 0 0.5rem !important;
-                grid-template: "header" "corrections" "answers" "sidebar" "urls" "pagination" / 100% !important;
-            }
-
-            @media screen and (max-width: 50em) {
-                /* Mobile Tier */
-                margin-left: 0 !important;
-                padding: 0 0.5rem !important;
-                grid-template: "header" "corrections" "answers" "sidebar" "urls" "pagination" / 100% !important;
-            }
-        }
-
-        /* --- 7. INDIVIDUAL RESULT STYLING --- */
-        .result {
-            padding: 0.6rem 0.8rem !important;
-            /* Reduced Padding */
-            margin-bottom: 0.25rem !important;
-            /* Reduced Margin */
-            background: var(--color-result-background) !important;
-            border-radius: 20px !important;
-            border: none !important;
-            box-shadow: none !important;
-            display: flow-root !important;
-            /* Container for floats */
-            position: relative !important;
-
-            h3 {
-                font-size: 1.125rem !important;
-                /* Match original */
-                margin: 0 !important;
-                line-height: @results-line-height !important;
-
-                a {
-                    font-weight: normal !important;
-                    color: var(--color-result-link-font) !important;
-                }
-            }
-
-            .url_wrapper {
-                font-size: 0.85rem !important;
-                /* Clearly visible */
-                color: var(--color-result-url-font) !important;
-                margin-top: 0 !important;
-                margin-bottom: 0.1rem !important;
-                opacity: 1 !important;
-                display: flex !important;
-                align-items: center !important;
-                flex-wrap: nowrap !important;
-                gap: 0.5rem !important;
-            }
-
-            .content {
-                font-size: 0.9em !important;
-                line-height: 1.4 !important;
-                margin-top: 0.15rem !important;
-                color: var(--color-base-font) !important;
-                display: block !important;
-            }
-
-            .published_date {
-                float: left !important;
-                margin-right: 0.5rem !important;
-                font-size: 0.9em !important;
-                color: var(--color-result-publishdate-font) !important;
-                line-height: 1.4 !important;
-            }
-
-            .result_author,
-            .engines,
-            .stat,
-            .result_source {
-                font-size: 0.75rem !important;
-                text-align: right !important;
-                float: right !important;
-                display: block !important;
-                opacity: 0.6 !important;
-                color: var(--color-result-engines-font) !important;
-                margin-top: 0 !important;
-                /* Zero top margin */
-                clear: both !important;
-            }
-
-            img.thumbnail {
-                float: right !important;
-                border-radius: 20px !important;
-                width: 12rem !important;
-                height: 7.5rem !important;
-                object-fit: cover !important;
-                margin-left: 1.5rem !important;
-                margin-bottom: 0.5rem !important;
-
-                @media screen and (max-width: 60em) {
-                    width: 10rem !important;
-                    height: 6.25rem !important;
-                }
-
-                @media screen and (max-width: 50em) {
-                    width: 8rem !important;
-                    height: 5rem !important;
-                }
-            }
-        }
-
-        /* --- 8. SPECIAL RESULT TYPES --- */
-        .result-images {
-            border-radius: 20px !important;
-            padding: 0.25rem !important;
-            width: 15.5% !important;
-            /* ~6 per row desktop */
-
-            @media screen and (max-width: 50em) {
-                width: 47% !important;
-                /* 2 per row mobile */
-                margin: 1.5% !important;
-            }
-
-            >a {
-                display: grid !important;
-                grid-template-columns: 100% !important;
-                /* Force full width of container */
-                justify-content: center !important;
-                text-decoration: none !important;
-                color: inherit !important;
-                height: 100% !important;
-            }
-
-            img {
-                grid-row: 1 !important;
-                border-radius: 25px !important;
-                /* Match original 25px */
-                width: 100% !important;
-                height: 12rem !important;
-                /* Increased height */
-                object-fit: cover !important;
-                /* Fill the card */
-                background: rgba(0, 0, 0, 0.03);
-                margin-bottom: 0.5rem !important;
-
-                @media screen and (max-width: 50em) {
-                    height: 10rem !important;
-                }
-            }
-
-            .image_resolution {
-                grid-row: 2 !important;
-                font-size: 0.75rem !important;
-                color: var(--color-base-font) !important;
-                opacity: 0.7;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                margin-bottom: 0.1rem !important;
-            }
-
-            span.title {
-                grid-row: 3 !important;
-                font-size: 0.85rem !important;
-                color: var(--color-base-font) !important;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                font-weight: normal !important;
-                margin-bottom: 0.1rem !important;
-            }
-
-            span.source {
-                grid-row: 4 !important;
-                font-size: 0.75rem !important;
-                color: var(--color-result-url-font) !important;
-                opacity: 0.8;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        .result-videos {
-            display: flow-root !important;
-
-            img.thumbnail {
-                float: left !important;
-                margin-left: 0 !important;
-                margin-right: 1rem !important;
-                margin-bottom: 0.5rem !important;
-                height: unset !important;
-                /* Natural height */
-                max-width: 40% !important;
-                border-radius: 25px !important;
-
-                @media screen and (max-width: 50em) {
-                    float: none !important;
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    margin: 0 0 1rem 0 !important;
-                }
-            }
-        }
-
-        #sidebar .infobox {
-            border-radius: 25px !important;
-            border: none !important;
-            background: var(--color-header-background) !important;
-            padding: 1rem !important;
-            margin-bottom: 0.25rem !important;
-            box-shadow: none !important;
-            display: flex !important;
-            flex-direction: column !important;
-
-            img {
-                order: -1 !important;
-                /* Force Image to Top */
-                border-radius: 25px !important;
-                /* Match original 25px */
-                width: 100% !important;
-                height: auto !important;
-                margin-bottom: 0.8rem !important;
-                float: none !important;
-            }
-
-            h2 {
-                margin: 0 0 0.5rem 0 !important;
-                font-size: 1.25rem !important;
-            }
-
-            p {
-                margin: 0 0 0.5rem 0 !important;
-                line-height: 1.4 !important;
-            }
-
-            ul {
-                list-style-type: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            li {
-                margin-bottom: 0.25rem !important;
-            }
-        }
-
-        #answers,
-        .sidebar-collapsible {
-            border-radius: 20px !important;
-            border: none !important;
-            /* No Border */
-            background: var(--color-header-background) !important;
-            padding: 1rem !important;
-            margin-bottom: 0.25rem !important;
-            /* Reduced margin */
-            box-shadow: none !important;
-        }
-
-        /* --- 10. AUTOCOMPLETE REMOVED (Revert to Vanilla) --- */
-
-        /* --- 11. SUBTLE POLISH --- */
-        .bar-chart-bar {
-            border-radius: 50px !important;
-        }
-
-        #backToTop {
-            border-radius: 50px !important;
-        }
-
-        .numbered_pagination {
-            justify-content: center !important;
-        }
+    &:active {
+        background-color: rgba(0, 0, 0, 0.05);
+        transition: 0s;
+        filter: brightness(0.02) blur(1.5px);
     }
 }
 
-/* --- 12. COLOR PALETTE & MODES (Outside specificity wrap for :root) --- */
+.search_filters {
+    margin-top: 0;
+    margin-left: (@results-offset + 0.25rem);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+#suggestions {
+    display: flex;
+
+    .wrapper {
+        width: 100%;
+        text-align: left;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 0.25rem;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        form {
+            display: inline;
+            border-radius: 50px;
+            border: 0.125rem solid #0002;
+            background: var(--color-header-background);
+            padding: 0.125rem 0.5rem;
+            margin: 0.125rem;
+        }
+    }
+
+    ul {
+        padding: 0 1rem;
+    }
+
+    input {
+        color: @nord7;
+        border-radius: 0;
+        overflow: scroll;
+        scrollbar-width: none;
+        text-decoration: none;
+    }
+
+    .infobox .url,
+    input[type="submit"],
+    .infobox .url a {
+        list-style: none;
+    }
+}
+
+/* --- 4. RESULTS LAYOUT & STYLING --- */
+#results {
+    max-width: 100%;
+    margin-top: 0.125rem;
+    margin-left: @results-offset;
+}
+
+.result {
+    padding: 0.5rem 1rem;
+    max-width: 100%;
+    min-width: 0;
+    border-left: 0rem solid transparent;
+
+    h3 {
+        font-size: 1.125rem;
+        margin: 0.125rem 0 0 0;
+    }
+
+    .content {
+        line-height: 1.25;
+        display: inline;
+        hyphens: auto;
+        overflow: hidden;
+    }
+
+    .altlink {
+        margin: 0.25rem !important;
+
+        a {
+            font-size: 1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+    }
+
+    img.thumbnail {
+        float: right;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+        margin-left: 1rem;
+        border: none;
+        border-radius: 25px;
+        max-width: 45%;
+        max-height: 10rem;
+        object-fit: contain;
+        box-shadow: var(--color-search-shadow);
+    }
+}
+
+/* --- 5. SPECIAL RESULT TYPES --- */
+.result-images {
+    border-radius: 25px;
+    max-width: fit-content;
+    padding: 0.25rem;
+
+    &>a {
+        display: grid;
+        grid-template-columns: max-content;
+        overflow: hidden;
+    }
+
+    img {
+        height: @results-image-row-height;
+        border-radius: 25px;
+        width: fit-content;
+        object-fit: contain;
+        min-width: 0;
+    }
+
+    .image_resolution {
+        align-self: flex-start;
+    }
+}
+
+.result-videos .content {
+    max-height: 5ch;
+    display: flow-root;
+}
+
+/* --- 6. SIDEBAR & INFOBOXES --- */
+#sidebar .infobox,
+#answers {
+    border-radius: 25px;
+    background: var(--color-header-background);
+    padding: 1.5rem;
+    margin: 0.5rem 0;
+    border: none;
+}
+
+#sidebar .infobox img {
+    justify-self: center;
+    border-radius: 25px;
+    display: flex;
+}
+
+/* --- 7. AUTOCOMPLETE (From Diff) --- */
+.autocomplete {
+    position: absolute;
+    min-width: @search-width;
+    overflow-y: hidden;
+    border-radius: 0;
+    max-height: 0;
+
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: var(--color-header-background);
+    }
+
+    >ul>li {
+        padding: 1rem;
+    }
+
+    &.open {
+        display: none;
+        /* Base state is hidden */
+        max-height: 100dvh !important;
+        overflow-y: auto;
+        z-index: 5000;
+        margin-top: 3.5rem;
+        border-radius: 0 0 25px 25px;
+    }
+}
+
+#search_view:focus-within>.search_box>.autocomplete.open {
+    display: block !important;
+}
+
+/* --- 8. MOBILE OVERLAY (From Diff) --- */
+@media screen and (max-width: 50em) {
+    .search_box {
+        max-width: 100%;
+    }
+
+    .search_filters {
+        margin-left: 0.5rem;
+    }
+
+    #search_view:focus-within {
+        display: block;
+        background-color: var(--color-header-background);
+        position: absolute;
+        top: 0;
+        height: 100%;
+        max-width: 100dvw;
+        width: 100%;
+        z-index: 2000;
+        padding: 0 !important;
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        border-radius: 0 0 25px 25px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .search_box {
+            border-bottom: 1px solid var(--color-search-border);
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+        }
+    }
+
+    .autocomplete {
+        min-width: 100%;
+    }
+}
+
+/* --- 9. MISC & GAP FIXES --- */
+#main_index {
+    margin-top: 33vh;
+}
+
+.index_endpoint {
+    background: var(--color-header-background);
+}
+
+.bar-chart-bar {
+    border-radius: 50px;
+}
+
+select {
+    padding: 0.25rem 0.5rem !important;
+    background-size: 1.5rem;
+}
+
+select:focus {
+    border-radius: 25px;
+}
+
+input.checkbox-onoff[type="checkbox"]::before {
+    transition: left 0.1s;
+}
+
+/* --- 10. COLOR PALETTE (From Diff) --- */
 :root {
     --color-base-font: @nord1;
     --color-base-background: @nord6;
@@ -599,37 +377,90 @@ html {
     --color-show-btn-background: @nord4;
     --color-show-btn-font: @nord1;
     --color-search-border: @nord4;
-    --color-search-shadow: 0 2px 8px rgba(@nord0, 0.15);
+    --color-search-shadow: 0 2px 8px rgba(46, 52, 64, 0.15);
     --color-search-background: @nord6;
     --color-search-font: @nord0;
     --color-search-background-hover: @nord9;
+    --color-error: @nord11;
+    --color-error-background: #f2e0e2;
+    --color-warning: @nord12;
+    --color-warning-background: #fcf8f6;
+    --color-success: @nord14;
+    --color-success-background: #fefefe;
     --color-categories-item-selected-font: @nord10;
     --color-categories-item-border-selected: @nord10;
     --color-autocomplete-font: @nord0;
+    --color-autocomplete-border: @nord4;
+    --color-autocomplete-shadow: 0 2px 8px rgba(46, 52, 64, 0.1);
     --color-autocomplete-background: @nord6;
     --color-autocomplete-background-hover: @nord5;
     --color-answer-font: @nord1;
     --color-answer-background: @nord5;
+    --color-result-keyvalue-col-table: @nord5;
+    --color-result-keyvalue-odd: @nord5;
+    --color-result-keyvalue-even: @nord6;
     --color-result-background: @nord6;
     --color-result-border: @nord4;
-    --color-result-description-highlight-font: @nord1;
     --color-result-url-font: @nord3;
+    --color-result-vim-selected: @nord5;
+    --color-result-vim-arrow: @nord9;
+    --color-result-description-highlight-font: @nord1;
     --color-result-link-font: @nord10;
     --color-result-link-font-highlight: @nord7;
     --color-result-link-visited-font: @nord15;
     --color-result-publishdate-font: @nord2;
     --color-result-engines-font: @nord3;
+    --color-result-search-url-border: @nord4;
+    --color-result-search-url-font: @nord1;
     --color-result-image-span-font: @nord1;
+    --color-result-image-span-font-selected: @nord6;
     --color-result-image-background: @nord6;
-    --color-favicon-background-color: @nord5;
-    --color-favicon-border-color: @nord4;
+    --color-settings-tr-hover: @nord5;
+    --color-settings-engine-description-font: @nord2;
+    --color-settings-table-group-background: rgba(76, 86, 106, 0.1);
     --color-result-detail-font: @nord4;
     --color-result-detail-label-font: @nord3;
     --color-result-detail-background: @nord0;
     --color-result-detail-hr: @nord2;
     --color-result-detail-link: @nord8;
-    --color-bar-chart-primary: @nord14;
-    --color-bar-chart-secondary: @nord9;
+    --color-result-detail-loader-border: rgba(216, 222, 233, 0.2);
+    --color-result-detail-loader-borderleft: rgba(46, 52, 64, 0);
+    --color-toolkit-badge-font: @nord6;
+    --color-toolkit-badge-background: @nord3;
+    --color-toolkit-kbd-font: @nord6;
+    --color-toolkit-kbd-background: @nord1;
+    --color-toolkit-dialog-border: @nord4;
+    --color-toolkit-dialog-background: @nord6;
+    --color-toolkit-tabs-label-border: @nord6;
+    --color-toolkit-tabs-section-border: @nord4;
+    --color-toolkit-select-background: @nord5;
+    --color-toolkit-select-border: @nord4;
+    --color-toolkit-select-background-hover: @nord4;
+    --color-toolkit-input-text-font: @nord0;
+    --color-toolkit-checkbox-onoff-off-background: @nord4;
+    --color-toolkit-checkbox-onoff-on-background: @nord9;
+    --color-toolkit-checkbox-onoff-on-mark-background: @nord14;
+    --color-toolkit-checkbox-onoff-on-mark-color: @nord6;
+    --color-toolkit-checkbox-onoff-off-mark-background: @nord11;
+    --color-toolkit-checkbox-onoff-off-mark-color: @nord6;
+    --color-toolkit-checkbox-label-background: @nord5;
+    --color-toolkit-checkbox-label-border: @nord4;
+    --color-toolkit-checkbox-input-border: @nord9;
+    --color-toolkit-engine-tooltip-border: @nord4;
+    --color-toolkit-engine-tooltip-background: @nord6;
+    --color-toolkit-loader-border: rgba(59, 66, 82, 0.2);
+    --color-toolkit-loader-borderleft: rgba(236, 239, 244, 0);
+    --color-doc-code: @nord1;
+    --color-doc-code-background: @nord5;
+    --color-bar-chart-primary: @nord8;
+    --color-bar-chart-secondary: @nord13;
+    --color-image-resolution-background: rgba(46, 52, 64, 0.5);
+    --color-image-resolution-font: @nord6;
+    --color-loading-indicator: rgba(59, 66, 82, 0.2);
+    --color-loading-indicator-gap: @nord6;
+    --color-line-number: @nord3;
+    --color-favicon-background-color: @nord5;
+    --color-favicon-border-color: @nord4;
 }
 
 .dark-themes() {
@@ -653,33 +484,83 @@ html {
     --color-show-btn-background: @nord3;
     --color-show-btn-font: @nord5;
     --color-search-border: @nord3;
-    --color-search-shadow: 0 4px 16px rgba(@nord0, 0.9);
+    --color-search-shadow: 0 4px 16px rgba(46, 52, 64, 0.9);
     --color-search-background: @nord0;
     --color-search-font: @nord5;
     --color-search-background-hover: @nord9;
+    --color-error: @nord11;
+    --color-error-background: @nord2;
+    --color-warning: @nord12;
+    --color-warning-background: @nord2;
+    --color-success: @nord14;
+    --color-success-background: @nord2;
     --color-categories-item-selected-font: @nord8;
     --color-categories-item-border-selected: @nord8;
     --color-autocomplete-font: @nord5;
+    --color-autocomplete-border: @nord3;
+    --color-autocomplete-shadow: 0 2px 8px rgba(46, 52, 64, 0.25);
     --color-autocomplete-background: @nord1;
     --color-autocomplete-background-hover: @nord2;
     --color-answer-font: @nord4;
     --color-answer-background: @nord1;
+    --color-result-keyvalue-col-table: @nord1;
+    --color-result-keyvalue-odd: @nord1;
+    --color-result-keyvalue-even: @nord0;
     --color-result-background: @nord0;
     --color-result-border: @nord1;
-    --color-result-description-highlight-font: @nord6;
     --color-result-url-font: @nord5;
+    --color-result-vim-selected: rgba(67, 76, 94, 0.8);
+    --color-result-vim-arrow: @nord9;
+    --color-result-description-highlight-font: @nord6;
     --color-result-link-font: @nord8;
     --color-result-link-font-highlight: @nord7;
     --color-result-link-visited-font: @nord12;
     --color-result-publishdate-font: var(--color-answer-font);
     --color-result-engines-font: @nord8;
+    --color-result-search-url-border: @nord3;
+    --color-result-search-url-font: @nord5;
     --color-result-detail-font: @nord5;
     --color-result-detail-label-font: @nord4;
     --color-result-detail-background: @nord0;
     --color-result-detail-hr: @nord3;
     --color-result-detail-link: @nord7;
+    --color-result-detail-loader-border: rgba(216, 222, 233, 0.2);
+    --color-result-detail-loader-borderleft: rgba(46, 52, 64, 0);
     --color-result-image-span-font: @nord4;
+    --color-result-image-span-font-selected: @nord0;
     --color-result-image-background: @nord0;
+    --color-settings-tr-hover: @nord2;
+    --color-settings-engine-description-font: @nord4;
+    --color-settings-table-group-background: @nord1;
+    --color-toolkit-badge-font: @nord5;
+    --color-toolkit-badge-background: @nord3;
+    --color-toolkit-kbd-font: @nord0;
+    --color-toolkit-kbd-background: @nord5;
+    --color-toolkit-dialog-border: @nord3;
+    --color-toolkit-dialog-background: @nord1;
+    --color-toolkit-tabs-label-border: @nord0;
+    --color-toolkit-tabs-section-border: @nord3;
+    --color-toolkit-select-background: @nord2;
+    --color-toolkit-select-border: @nord3;
+    --color-toolkit-select-background-hover: @nord3;
+    --color-toolkit-input-text-font: @nord5;
+    --color-toolkit-checkbox-onoff-off-background: @nord2;
+    --color-toolkit-checkbox-onoff-on-background: var(--color-base-font);
+    --color-toolkit-checkbox-onoff-on-mark-background: var(--color-success);
+    --color-toolkit-checkbox-onoff-on-mark-color: @nord0;
+    --color-toolkit-checkbox-onoff-off-mark-background: var(--color-error);
+    --color-toolkit-checkbox-onoff-off-mark-color: @nord0;
+    --color-toolkit-checkbox-label-background: @nord1;
+    --color-toolkit-checkbox-label-border: @nord3;
+    --color-toolkit-checkbox-input-border: @nord9;
+    --color-toolkit-engine-tooltip-border: @nord1;
+    --color-toolkit-engine-tooltip-background: @nord2;
+    --color-toolkit-loader-border: rgba(216, 222, 233, 0.2);
+    --color-toolkit-loader-borderleft: rgba(46, 52, 64, 0);
+    --color-doc-code: @nord5;
+    --color-doc-code-background: @nord2;
+    --color-favicon-background-color: @nord4;
+    --color-favicon-border-color: @nord3;
 }
 
 .black-themes() {
@@ -695,6 +576,8 @@ html {
     --color-result-background: #000;
     --color-result-detail-background: #000;
     --color-result-image-background: #000;
+    --color-toolkit-dialog-background: #000;
+    --color-toolkit-tabs-label-border: #000;
 }
 
 :root.theme-dark {
