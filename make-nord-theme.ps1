@@ -101,11 +101,11 @@ $BuiltStatic = Join-Path $TempBuild "searx\static\themes\simple"
 Write-Host "   Mapping assets to legacy paths..." -ForegroundColor Gray
 
 # CSS Mapping
-if (Test-Path (Join-Path $BuiltStatic "sxng-ltr.min.css")) {
-    Copy-Item (Join-Path $BuiltStatic "sxng-ltr.min.css") (Join-Path $OutCss "searxng.min.css") -Force
-}
-if (Test-Path (Join-Path $BuiltStatic "sxng-rtl.min.css")) {
-    Copy-Item (Join-Path $BuiltStatic "sxng-rtl.min.css") (Join-Path $OutCss "searxng-rtl.min.css") -Force
+if (Test-Path (Join-Path $BuiltStatic "sxng-ltr.min.css")) {  
+    Copy-Item (Join-Path $BuiltStatic "sxng-ltr.min.css") (Join-Path $OutCss "searxng-ltr.min.css") -Force  # CORRECT NAME  
+}  
+if (Test-Path (Join-Path $BuiltStatic "sxng-rtl.min.css")) {  
+    Copy-Item (Join-Path $BuiltStatic "sxng-rtl.min.css") (Join-Path $OutCss "searxng-rtl.min.css") -Force  
 }
 # Keep pygments/other CSS if they exist
 Get-ChildItem -Path $BuiltStatic -Filter "*.css" | ForEach-Object {
