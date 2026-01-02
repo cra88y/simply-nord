@@ -1,9 +1,14 @@
 /* ==========================================================================
-   NORD CRAB OVERRIDES - V13 (DIFF-DERIVED MASTER)
-   Source: Direct translation of the provided git diff.
+   Simply-Nord Theme Overrides - FINAL
+   - This file contains all customizations to transform the vanilla theme.
+   - It is designed to be imported last in the LESS build process.
+   - Generated from a complete analysis of source LESS and HTML templates.
    ========================================================================== */
 
-/* --- 0. DEFINITIONS & VARIABLES --- */
+/* --- 1. Variable Definitions & Overrides --- */
+
+// Nord Color Palette
+@nord01: #1d2128; // Custom dark header
 @nord0: #2e3440;
 @nord1: #3b4252;
 @nord2: #434c5e;
@@ -20,24 +25,19 @@
 @nord13: #ebcb8b;
 @nord14: #a3be8c;
 @nord15: #b48ead;
-@header-dark: #1d2128;
 
-/* Layout Variables from Diff */
+// Layout Variable Overrides (from definitions.less)
 @results-width: 45rem;
 @results-sidebar-width: 25rem;
 @results-offset: 10rem;
 @results-gap: 5rem;
 @search-width: 52rem;
 @results-image-row-height: 15.5rem;
+@results-image-row-height-phone: auto; // Allow natural height on mobile
+@result-padding: 0.5rem 1rem;
+@results-margin: 0;
 
-/* --- 1. GLOBAL STYLES & REMOVALS --- */
-html {
-    line-height: 1.25;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizelegibility;
-    font-variant-numeric: proportional-nums;
-}
-
+/* --- 2. Visual Removals & Global Tweaks --- */
 footer,
 .link_on_top_about,
 .link_on_top_donate,
@@ -49,15 +49,37 @@ footer,
     display: none !important;
 }
 
-#link_on_top {
-    font-size: 1.25rem;
+html {
+    line-height: 1.25;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    font-variant-numeric: proportional-nums;
 }
 
 #q::placeholder {
     color: transparent;
 }
 
-/* --- 2. SEARCH HEADER & BOX --- */
+#links_on_top {
+    font-size: 1.25rem;
+}
+
+/* --- 3. Component Style Overrides --- */
+
+// General Rounded Aesthetic
+.rounded-corners(@radius: 50px) {
+    border-radius: @radius;
+}
+
+.rounded-corners-tiny(@radius: 25px) {
+    border-radius: @radius;
+}
+
+.ltr-rounded-right-corners(@radius: 25px) {
+    border-radius: @radius;
+}
+
+// Search Header & Box
 #search_header {
     padding-top: 1rem;
     gap: 0.5rem;
@@ -65,41 +87,61 @@ footer,
 }
 
 .search_box {
-    border-radius: 50px;
     max-width: @search-width;
 }
 
-#q {
+#q,
+#send_search {
     padding: 0.8rem 1rem;
     font-size: 1.125rem;
-    border-top-left-radius: 50px;
+}
+
+#send_search {
+    padding-right: 1.5rem;
 }
 
 #clear_search {
     width: 2rem;
 }
 
-#send_search {
-    padding-right: 1.5rem;
-    border-radius: 0 0px 0px 0;
-    border-top-right-radius: 50px;
+// Autocomplete & Mobile Overlay
+.autocomplete {
+    min-width: @search-width;
+    border-radius: 0;
+    max-height: 0;
+
+    &:active,
+    &:focus,
+    &:hover {
+        background-color: var(--color-header-background);
+    }
+
+    >ul>li {
+        padding: 1rem;
+    }
+
+    &.open {
+        display: none; // Hidden by default, shown by focus-within
+        max-height: 100dvh !important;
+        margin-top: 3.5rem;
+        border-radius: 0 0 25px 25px;
+    }
 }
 
-/* --- 3. CATEGORIES & SUGGESTIONS --- */
+// This rule is critical for the new autocomplete behavior
+#search_view:focus-within>.search_box>.autocomplete.open {
+    display: block;
+}
+
+// Categories & Filters
 button.category_button {
     padding: 0.25rem 1rem 0.5rem 0.75rem;
     text-transform: lowercase;
     font-size: 1rem;
 
-    &.selected {
-        color: var(--color-categories-item-selected-font);
-        border-bottom: 2px solid var(--color-categories-item-border-selected);
-    }
-
     &:active {
         background-color: rgba(0, 0, 0, 0.05);
         transition: 0s;
-        filter: brightness(0.02) blur(1.5px);
     }
 }
 
@@ -114,10 +156,83 @@ button.category_button {
     }
 }
 
+select {
+    padding: 0.25rem 0.5rem !important;
+    background-size: 1.5rem;
+}
+
+// Results Layout & Cards
+#results {
+    margin-top: 0.125rem;
+}
+
+#results-header {
+    grid-area: corrections; // Place suggestions/answers in the first grid row
+}
+
+.result {
+    border-left-width: 0;
+
+    h3 {
+        font-size: 1.125rem;
+        margin: 0.125rem 0 0 0;
+    }
+
+    .content,
+    .stat {
+        display: inline;
+        hyphens: auto;
+        overflow: hidden;
+    }
+
+    img.thumbnail {
+        float: right;
+        margin: 0.25rem 0 0.25rem 1rem;
+        border: none;
+        max-width: 45%;
+        max-height: 10rem;
+        height: auto;
+        object-fit: contain;
+        box-shadow: var(--color-search-shadow);
+    }
+}
+
+.result-videos .content {
+    max-height: 5ch;
+    display: flow-root;
+}
+
+.result-images {
+    padding: 0.25rem;
+    max-width: fit-content;
+
+    >a {
+        display: grid;
+        grid-template-columns: max-content;
+        overflow: hidden;
+    }
+
+    img {
+        width: fit-content;
+        object-fit: contain;
+        min-width: 0;
+        border: none;
+    }
+}
+
+.engines {
+    filter: blur(0.5px);
+    text-align: end;
+    font-size: 0.9rem;
+    margin-top: 0.125rem;
+}
+
+// Suggestions (Complete Override for new HTML structure)
 #suggestions {
     display: flex;
 
     .wrapper {
+        display: flex;
         width: 100%;
         text-align: left;
         overflow: scroll;
@@ -139,15 +254,10 @@ button.category_button {
         }
     }
 
-    ul {
-        padding: 0 1rem;
-    }
-
     input {
         color: @nord7;
         border-radius: 0;
-        overflow: scroll;
-        scrollbar-width: none;
+        overflow: hidden; // Not scroll
         text-decoration: none;
     }
 
@@ -158,143 +268,48 @@ button.category_button {
     }
 }
 
-/* --- 4. RESULTS LAYOUT & STYLING --- */
-#results {
-    max-width: 100%;
-    margin-top: 0.125rem;
-    margin-left: @results-offset;
-}
-
-.result {
-    padding: 0.5rem 1rem;
-    max-width: 100%;
-    min-width: 0;
-    border-left: 0rem solid transparent;
-
-    h3 {
-        font-size: 1.125rem;
-        margin: 0.125rem 0 0 0;
-    }
-
-    .content {
-        line-height: 1.25;
-        display: inline;
-        hyphens: auto;
-        overflow: hidden;
-    }
-
-    .altlink {
-        margin: 0.25rem !important;
-
-        a {
-            font-size: 1rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 50px;
-            display: inline-block;
-        }
-    }
-
-    img.thumbnail {
-        float: right;
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-        margin-left: 1rem;
-        border: none;
-        border-radius: 25px;
-        max-width: 45%;
-        max-height: 10rem;
-        object-fit: contain;
-        box-shadow: var(--color-search-shadow);
-    }
-}
-
-/* --- 5. SPECIAL RESULT TYPES --- */
-.result-images {
-    border-radius: 25px;
-    max-width: fit-content;
-    padding: 0.25rem;
-
-    &>a {
-        display: grid;
-        grid-template-columns: max-content;
-        overflow: hidden;
-    }
-
-    img {
-        height: @results-image-row-height;
-        border-radius: 25px;
-        width: fit-content;
-        object-fit: contain;
-        min-width: 0;
-    }
-
-    .image_resolution {
-        align-self: flex-start;
-    }
-}
-
-.result-videos .content {
-    max-height: 5ch;
-    display: flow-root;
-}
-
-/* --- 6. SIDEBAR & INFOBOXES --- */
-#sidebar .infobox,
-#answers {
-    border-radius: 25px;
+// Sidebar & Answers
+#answers,
+#sidebar .infobox {
     background: var(--color-header-background);
     padding: 1.5rem;
     margin: 0.5rem 0;
     border: none;
 }
 
-#sidebar .infobox img {
-    justify-self: center;
-    border-radius: 25px;
-    display: flex;
+// Home Page
+#main_index {
+    margin-top: 33vh;
 }
 
-/* --- 7. AUTOCOMPLETE (From Diff) --- */
-.autocomplete {
-    position: absolute;
-    min-width: @search-width;
-    overflow-y: hidden;
-    border-radius: 0;
-    max-height: 0;
-
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: var(--color-header-background);
-    }
-
-    >ul>li {
-        padding: 1rem;
-    }
-
-    &.open {
-        display: none;
-        /* Base state is hidden */
-        max-height: 100dvh !important;
-        overflow-y: auto;
-        z-index: 5000;
-        margin-top: 3.5rem;
-        border-radius: 0 0 25px 25px;
-    }
+.index_endpoint {
+    background: var(--color-header-background);
 }
 
-#search_view:focus-within>.search_box>.autocomplete.open {
-    display: block !important;
+// Misc
+#backToTop {
+    border: none;
+    background: var(--color-header-background);
+    transition: opacity 0.2s;
 }
 
-/* --- 8. MOBILE OVERLAY (From Diff) --- */
-@media screen and (max-width: 50em) {
-    .search_box {
-        max-width: 100%;
+input.checkbox-onoff[type="checkbox"]::before {
+    transition: left 0.1s;
+}
+
+// Mobile Overrides
+@media screen and (max-width: @phone) {
+    .autocomplete {
+        min-width: 100%;
     }
 
     .search_filters {
         margin-left: 0.5rem;
+    }
+
+    .result-images img {
+        width: 45vw;
+        height: fit-content;
     }
 
     #search_view:focus-within {
@@ -323,39 +338,11 @@ button.category_button {
             padding: 0;
         }
     }
-
-    .autocomplete {
-        min-width: 100%;
-    }
 }
 
-/* --- 9. MISC & GAP FIXES --- */
-#main_index {
-    margin-top: 33vh;
-}
+/* --- 5. Color Theme Variable Overrides --- */
 
-.index_endpoint {
-    background: var(--color-header-background);
-}
-
-.bar-chart-bar {
-    border-radius: 50px;
-}
-
-select {
-    padding: 0.25rem 0.5rem !important;
-    background-size: 1.5rem;
-}
-
-select:focus {
-    border-radius: 25px;
-}
-
-input.checkbox-onoff[type="checkbox"]::before {
-    transition: left 0.1s;
-}
-
-/* --- 10. COLOR PALETTE (From Diff) --- */
+// Light Theme (Default)
 :root {
     --color-base-font: @nord1;
     --color-base-background: @nord6;
@@ -463,18 +450,19 @@ input.checkbox-onoff[type="checkbox"]::before {
     --color-favicon-border-color: @nord4;
 }
 
+// Dark & Auto-Dark Themes
 .dark-themes() {
     --color-base-font: @nord4;
     --color-base-background: @nord0;
     --color-base-background-mobile: @nord0;
     --color-url-font: @nord7;
     --color-url-visited-font: @nord15;
-    --color-header-background: @header-dark;
+    --color-header-background: @nord01;
     --color-header-border: @nord1;
     --color-footer-background: @nord0;
     --color-footer-border: @nord1;
     --color-sidebar-border: @nord3;
-    --color-sidebar-font: var(--color-base-font);
+    --color-sidebar-font: @nord4;
     --color-sidebar-background: @nord1;
     --color-backtotop-font: @nord4;
     --color-backtotop-border: @nord1;
@@ -515,7 +503,7 @@ input.checkbox-onoff[type="checkbox"]::before {
     --color-result-link-font: @nord8;
     --color-result-link-font-highlight: @nord7;
     --color-result-link-visited-font: @nord12;
-    --color-result-publishdate-font: var(--color-answer-font);
+    --color-result-publishdate-font: @nord4;
     --color-result-engines-font: @nord8;
     --color-result-search-url-border: @nord3;
     --color-result-search-url-font: @nord5;
@@ -545,10 +533,10 @@ input.checkbox-onoff[type="checkbox"]::before {
     --color-toolkit-select-background-hover: @nord3;
     --color-toolkit-input-text-font: @nord5;
     --color-toolkit-checkbox-onoff-off-background: @nord2;
-    --color-toolkit-checkbox-onoff-on-background: var(--color-base-font);
-    --color-toolkit-checkbox-onoff-on-mark-background: var(--color-success);
+    --color-toolkit-checkbox-onoff-on-background: @nord4;
+    --color-toolkit-checkbox-onoff-on-mark-background: @nord14;
     --color-toolkit-checkbox-onoff-on-mark-color: @nord0;
-    --color-toolkit-checkbox-onoff-off-mark-background: var(--color-error);
+    --color-toolkit-checkbox-onoff-off-mark-background: @nord11;
     --color-toolkit-checkbox-onoff-off-mark-color: @nord0;
     --color-toolkit-checkbox-label-background: @nord1;
     --color-toolkit-checkbox-label-border: @nord3;
@@ -563,6 +551,7 @@ input.checkbox-onoff[type="checkbox"]::before {
     --color-favicon-border-color: @nord3;
 }
 
+// Black Theme
 .black-themes() {
     --color-base-background: #000;
     --color-base-background-mobile: #000;
@@ -580,6 +569,7 @@ input.checkbox-onoff[type="checkbox"]::before {
     --color-toolkit-tabs-label-border: #000;
 }
 
+// Apply Dark/Black Themes
 :root.theme-dark {
     .dark-themes();
 }
@@ -590,7 +580,7 @@ input.checkbox-onoff[type="checkbox"]::before {
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not(.theme-light) {
+    :root.theme-auto {
         .dark-themes();
     }
 }
