@@ -34,6 +34,7 @@
 @results-padding: 0.8rem 1.1rem;
 /* Precise breathing room */
 @results-padding-categories: 0.25rem 1rem 0.5rem 0.75rem;
+@results-line-height: 1.3;
 
 /* --- SPECIFICITY WRAPPED RULES --- */
 html {
@@ -46,6 +47,19 @@ html {
     overflow-x: hidden !important;
     width: 100% !important;
     max-width: 100vw !important;
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        accent-color: @nord9 !important;
+        /* Nord Frost Blue */
+    }
+
+    /* Enforce Pill Buttons */
+    button,
+    .button,
+    input[type="submit"] {
+        border-radius: 50px !important;
+    }
 
     *,
     *::before,
@@ -98,13 +112,15 @@ html {
             padding-bottom: 0.5rem !important;
             gap: 0.5rem !important;
             background: var(--color-header-background) !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-bottom: none !important;
+            /* No Border */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
             /* Top Glow */
             width: 100% !important;
             display: flex !important;
             justify-content: space-between !important;
-            align-items: flex-start !important;
+            align-items: center !important;
+            /* Vertically Center Gear */
 
             @media screen and (max-width: 50em) {
                 margin: 0 !important;
@@ -112,6 +128,8 @@ html {
                 flex-wrap: wrap !important;
                 /* Allow wrapping for mobile */
                 box-shadow: none !important;
+                justify-content: center !important;
+                /* Center Search */
             }
         }
 
@@ -128,10 +146,13 @@ html {
 
         #q {
             border-radius: 50px 0 0 50px !important;
-            padding: 0.8rem 1rem !important;
+            padding: 0.8rem 0.6rem !important;
+            /* Tighter text start */
             font-size: 1.125rem !important;
             border: none !important;
-            width: 100% !important;
+            width: auto !important;
+            flex: 1 !important;
+            /* Flex grow to fill space */
             background: var(--color-search-background) !important;
             color: var(--color-search-font) !important;
 
@@ -153,19 +174,29 @@ html {
             height: auto !important;
             align-self: stretch !important;
             /* Match input height exactly */
+            pointer-events: auto !important;
+            z-index: 1000 !important;
 
             &:hover {
                 color: var(--color-search-background-hover) !important;
             }
         }
 
+        #clear_search.empty {
+            display: none !important;
+        }
+
         #send_search {
             border-radius: 0 50px 50px 0 !important;
-            padding-right: 1.5rem !important;
-            padding-left: 1rem !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
             border: none !important;
             background: var(--color-search-background) !important;
             cursor: pointer !important;
+            align-self: stretch !important;
+            /* Match height */
+            display: flex !important;
+            align-items: center !important;
 
             &:hover {
                 background-color: var(--color-search-background-hover) !important;
@@ -206,6 +237,9 @@ html {
                 padding: 0 0.5rem !important;
                 justify-content: flex-start !important;
                 /* Left align like results */
+                flex-wrap: nowrap !important;
+                /* Force Scroll */
+                overflow-x: auto !important;
             }
         }
 
@@ -215,7 +249,7 @@ html {
             width: @results-width !important;
             max-width: 100% !important;
 
-            @media screen and (max-width: 50em) {
+            @media screen and (max-width: 60em) {
                 width: 100% !important;
                 margin: 0.5rem 0 !important;
                 padding: 0 0.5rem !important;
@@ -223,6 +257,9 @@ html {
 
             .wrapper {
                 display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: flex-start !important;
+                overflow-x: auto !important;
                 overflow-x: auto !important;
                 scrollbar-width: none !important;
 
@@ -285,25 +322,31 @@ html {
 
         /* --- 7. INDIVIDUAL RESULT STYLING --- */
         .result {
-            padding: @results-padding !important;
-            margin-bottom: @results-margin !important;
+            padding: 0.6rem 0.8rem !important;
+            /* Reduced Padding */
+            margin-bottom: 0.25rem !important;
+            /* Reduced Margin */
             background: var(--color-result-background) !important;
             border-radius: 20px !important;
             border: none !important;
-            /* No Border */
             box-shadow: none !important;
-            display: grid !important;
-            grid-template-areas:
-                "url thumbnail"
-                "title thumbnail"
-                "content thumbnail"
-                "metadata thumbnail" !important;
-            grid-template-columns: 1fr auto !important;
-            column-gap: 1.5rem !important;
-            align-items: start !important;
+            display: flow-root !important;
+            /* Container for floats */
+            position: relative !important;
+
+            h3 {
+                font-size: 1.125rem !important;
+                /* Match original */
+                margin: 0 !important;
+                line-height: @results-line-height !important;
+
+                a {
+                    font-weight: normal !important;
+                    color: var(--color-result-link-font) !important;
+                }
+            }
 
             .url_wrapper {
-                grid-area: url !important;
                 font-size: 0.85rem !important;
                 /* Clearly visible */
                 color: var(--color-result-url-font) !important;
@@ -316,20 +359,7 @@ html {
                 gap: 0.5rem !important;
             }
 
-            h3 {
-                grid-area: title !important;
-                font-size: 1.25rem !important;
-                margin: 0 !important;
-                line-height: 1.3 !important;
-
-                a {
-                    font-weight: normal !important;
-                    color: var(--color-result-link-font) !important;
-                }
-            }
-
             .content {
-                grid-area: content !important;
                 font-size: 0.9em !important;
                 line-height: 1.4 !important;
                 margin-top: 0.15rem !important;
@@ -337,58 +367,37 @@ html {
                 display: block !important;
             }
 
-            .result_author,
-            .engines,
-            .stat,
-            .result_source {
-                grid-area: metadata !important;
-                font-size: 0.75rem !important;
-                text-align: right !important;
-                /* Bottom Right */
-                justify-self: end !important;
-                display: block !important;
-                opacity: 0.6 !important;
-                color: var(--color-result-engines-font) !important;
-                margin: 0.5rem 0 0 0 !important;
-                /* Separation from content */
-                filter: none !important;
-            }
-
             .published_date {
-                grid-area: content !important;
                 float: left !important;
                 margin-right: 0.5rem !important;
                 font-size: 0.9em !important;
                 color: var(--color-result-publishdate-font) !important;
+                line-height: 1.4 !important;
             }
 
-            .engines {
-                /* Result engines at bottom right */
+            .result_author,
+            .engines,
+            .stat,
+            .result_source {
+                font-size: 0.75rem !important;
                 text-align: right !important;
                 float: right !important;
-                font-size: 0.75rem !important;
-                opacity: 0.5 !important;
-            }
-
-            .cache_link,
-            .proxyfied_link {
-                font-size: 0.75rem !important;
-                margin-left: 0.5rem !important;
-                opacity: 0.4 !important;
-                color: var(--color-result-url-font) !important;
-
-                &:hover {
-                    opacity: 0.8 !important;
-                }
+                display: block !important;
+                opacity: 0.6 !important;
+                color: var(--color-result-engines-font) !important;
+                margin-top: 0 !important;
+                /* Zero top margin */
+                clear: both !important;
             }
 
             img.thumbnail {
-                grid-area: thumbnail !important;
+                float: right !important;
                 border-radius: 20px !important;
                 width: 12rem !important;
                 height: 7.5rem !important;
                 object-fit: cover !important;
-                align-self: start !important;
+                margin-left: 1.5rem !important;
+                margin-bottom: 0.5rem !important;
 
                 @media screen and (max-width: 60em) {
                     width: 10rem !important;
@@ -406,25 +415,36 @@ html {
         .result-images {
             border-radius: 20px !important;
             padding: 0.25rem !important;
-            width: 19% !important;
+            width: 15.5% !important;
+            /* ~6 per row desktop */
 
             @media screen and (max-width: 50em) {
                 width: 47% !important;
+                /* 2 per row mobile */
                 margin: 1.5% !important;
             }
 
             >a {
-                display: flex !important;
-                flex-direction: column !important;
+                display: grid !important;
+                grid-template-columns: 100% !important;
+                /* Force full width of container */
+                justify-content: center !important;
+                text-decoration: none !important;
+                color: inherit !important;
+                height: 100% !important;
             }
 
             img {
-                order: 1 !important;
-                border-radius: 20px !important;
+                grid-row: 1 !important;
+                border-radius: 25px !important;
+                /* Match original 25px */
                 width: 100% !important;
                 height: 12rem !important;
+                /* Increased height */
                 object-fit: cover !important;
-                margin-bottom: 0.25rem !important;
+                /* Fill the card */
+                background: rgba(0, 0, 0, 0.03);
+                margin-bottom: 0.5rem !important;
 
                 @media screen and (max-width: 50em) {
                     height: 10rem !important;
@@ -432,33 +452,32 @@ html {
             }
 
             .image_resolution {
-                order: 2 !important;
+                grid-row: 2 !important;
                 font-size: 0.75rem !important;
-                /* Text visible */
                 color: var(--color-base-font) !important;
                 opacity: 0.7;
-                display: block !important;
-                margin: 0 !important;
-            }
-
-            span.title {
-                order: 3 !important;
-                font-size: 0.85rem !important;
-                margin-top: 0.1rem !important;
-                display: block !important;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                margin-bottom: 0.1rem !important;
+            }
+
+            span.title {
+                grid-row: 3 !important;
+                font-size: 0.85rem !important;
                 color: var(--color-base-font) !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 font-weight: normal !important;
+                margin-bottom: 0.1rem !important;
             }
 
             span.source {
-                order: 4 !important;
+                grid-row: 4 !important;
                 font-size: 0.75rem !important;
                 color: var(--color-result-url-font) !important;
                 opacity: 0.8;
-                display: block !important;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -466,22 +485,69 @@ html {
         }
 
         .result-videos {
+            display: flow-root !important;
+
             img.thumbnail {
-                width: 18rem !important;
+                float: left !important;
+                margin-left: 0 !important;
+                margin-right: 1rem !important;
+                margin-bottom: 0.5rem !important;
+                height: unset !important;
+                /* Natural height */
                 max-width: 40% !important;
-                border-radius: 20px !important;
-                margin-right: 1.25rem !important;
+                border-radius: 25px !important;
 
                 @media screen and (max-width: 50em) {
+                    float: none !important;
                     width: 100% !important;
                     max-width: 100% !important;
-                    margin: 0 0 0.5rem 0 !important;
+                    margin: 0 0 1rem 0 !important;
                 }
             }
         }
 
-        /* --- 9. SIDEBAR & INFOBOXES --- */
-        #sidebar .infobox,
+        #sidebar .infobox {
+            border-radius: 25px !important;
+            border: none !important;
+            background: var(--color-header-background) !important;
+            padding: 1rem !important;
+            margin-bottom: 0.25rem !important;
+            box-shadow: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+
+            img {
+                order: -1 !important;
+                /* Force Image to Top */
+                border-radius: 25px !important;
+                /* Match original 25px */
+                width: 100% !important;
+                height: auto !important;
+                margin-bottom: 0.8rem !important;
+                float: none !important;
+            }
+
+            h2 {
+                margin: 0 0 0.5rem 0 !important;
+                font-size: 1.25rem !important;
+            }
+
+            p {
+                margin: 0 0 0.5rem 0 !important;
+                line-height: 1.4 !important;
+            }
+
+            ul {
+                list-style-type: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            li {
+                margin-bottom: 0.25rem !important;
+            }
+        }
+
         #answers,
         .sidebar-collapsible {
             border-radius: 20px !important;
@@ -489,23 +555,12 @@ html {
             /* No Border */
             background: var(--color-header-background) !important;
             padding: 1rem !important;
-            margin-bottom: @results-margin !important;
+            margin-bottom: 0.25rem !important;
+            /* Reduced margin */
             box-shadow: none !important;
         }
 
-        /* --- 10. AUTOCOMPLETE --- */
-        .autocomplete {
-            border-radius: 0 0 20px 20px !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-            margin-top: 0.125rem !important;
-
-            @media screen and (max-width: 50em) {
-                width: 100vw !important;
-                left: 0 !important;
-                margin-top: 0 !important;
-                border-radius: 0 !important;
-            }
-        }
+        /* --- 10. AUTOCOMPLETE REMOVED (Revert to Vanilla) --- */
 
         /* --- 11. SUBTLE POLISH --- */
         .bar-chart-bar {
@@ -573,6 +628,8 @@ html {
     --color-result-detail-background: @nord0;
     --color-result-detail-hr: @nord2;
     --color-result-detail-link: @nord8;
+    --color-bar-chart-primary: @nord14;
+    --color-bar-chart-secondary: @nord9;
 }
 
 .dark-themes() {
