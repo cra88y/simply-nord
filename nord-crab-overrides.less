@@ -1,10 +1,3 @@
-/* ==========================================================================
-   Simply-Nord Theme Overrides - FINAL (v8)
-   - Definitive version addressing all specificity and layout regressions.
-   - Correctly overrides responsive stacking by targeting the same context
-     as the base theme, eliminating the need for "!important".
-   ========================================================================== */
-
 /* --- 1. Variable Definitions & Overrides --- */
 
 // Nord Color Palette
@@ -27,15 +20,7 @@
 @nord15: #b48ead;
 
 // Layout Variable Overrides
-@results-width: 45rem;
-@results-sidebar-width: 25rem;
-@results-offset: 10rem;
-@results-gap: 5rem;
 @search-width: 52rem;
-@result-padding: 0.5rem 1rem;
-@results-margin: 0;
-@phone: 50em;
-@tablet: 79.75em;
 
 /* --- 2. Visual Removals & Global Tweaks --- */
 footer,
@@ -122,25 +107,38 @@ html {
 
 // Autocomplete & Mobile Overlay
 .autocomplete {
-    min-width: @search-width;
-    border-radius: 0;
+    min-width: auto;
+    width: 100%;
+    max-width: @search-width;
+    border-radius: 0 0 25px 25px;
+    border: 1px solid var(--color-autocomplete-border);
+    background: var(--color-autocomplete-background);
+    box-shadow: var(--color-autocomplete-shadow);
     max-height: 0;
-
-    &:active,
-    &:focus,
-    &:hover {
-        background-color: var(--color-header-background);
-    }
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
 
     >ul>li {
-        padding: 1rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-autocomplete-border);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background-color: var(--color-autocomplete-background-hover);
+        }
     }
 
     &.open {
-        display: none;
-        max-height: 100dvh !important;
-        margin-top: 3.5rem;
-        border-radius: 0 0 25px 25px;
+        display: block;
+        max-height: 50vh; // Dynamic height based on content  
+        opacity: 1;
+        margin-top: -1px; // Connect with search box  
     }
 }
 
@@ -179,18 +177,8 @@ select {
 #results {
     margin-top: 0.125rem;
     margin-left: @results-offset;
-    grid-template:
-        "header sidebar" min-content
-        "corrections sidebar" min-content
-        "answers sidebar" min-content
-        "urls sidebar" 1fr
-        "pagination sidebar" min-content
-        / @results-width @results-sidebar-width;
 }
 
-#results-header {
-    grid-area: header;
-}
 
 // Result Cards
 .result {
@@ -213,7 +201,8 @@ select {
     img.thumbnail {
         float: right;
         margin: 0.25rem 0 0.25rem 1rem;
-        border: none;
+        border-radius: 25px;
+        box-shadow: var(--color-search-shadow);
         max-width: 45%;
         max-height: 10rem;
         height: auto;
@@ -226,6 +215,8 @@ select {
         float: left !important;
         margin: 0 1rem 0.5rem 0 !important;
         max-width: 35%;
+        border-radius: 25px;
+        box-shadow: var(--color-search-shadow);
     }
 
     .content {
@@ -254,47 +245,99 @@ select {
     margin-top: 0.125rem;
 }
 
-// Image Results Page Layout - JUSTIFIED GRID (The Better Fix)
 #main_results div#results.only_template_images {
-
     #urls {
         display: grid;
-        // Create responsive columns. Adjust 250px to change the base size.
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        // Let rows size themselves automatically based on content.
+        // Responsive columns: 2 on mobile, auto-fill wider screens  
+        grid-template-columns: repeat(auto-fit, minmax(min(300px, 50vw), 1fr));
         grid-auto-rows: auto;
-        gap: 0.5rem;
-        // Align items to the start (top) of their grid cell.
+        gap: 1rem;
+        // Align items to top of their row  
         align-items: start;
+        justify-items: stretch;
     }
 
     .result-images {
-        // Remove old flex properties
         padding: 0;
         height: auto;
-        max-width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
 
         >a {
-            display: block; // No need for flex here anymore
+            display: block;
+            width: 100%;
+            aspect-ratio: 4/3; // Respect aspect ratio  
             overflow: hidden;
+            border-radius: 25px;
+            background: var(--color-result-background);
         }
 
         img {
             width: 100%;
-            height: auto; // This is key, the image determines the cell height
-            object-fit: contain;
+            height: 100%;
+            object-fit: contain; // Contain within aspect ratio  
+            object-position: center;
             border: none;
         }
 
-        // Your existing styles for text are fine
+        // Text info below image  
         .image_resolution,
         span.title,
         span.source {
             position: static;
             display: block;
             width: 100%;
-            padding: 0.125rem 0 0 0;
-            flex-shrink: 0;
+            padding: 0.5rem 0 0 0;
+            font-size: 0.85rem;
+        }
+    }
+}
+
+// Mobile-specific adjustments  
+@media screen and (max-width: @phone) {
+    #main_results div#results.only_template_images {
+        #urls {
+            // Force exactly 2 columns on mobile  
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .result-images>a {
+            aspect-ratio: 1/1; // Square on mobile for better fit  
+        }
+    }
+
+    .result-videos {
+        img.thumbnail {
+            float: none !important;
+            margin: 0 0 1rem 0 !important;
+            max-width: 100%;
+        }
+
+        .content {
+            overflow: inherit;
+        }
+    }
+}
+
+// Tablet and wider screens  
+@media screen and (min-width: @phone) and (max-width: @tablet) {
+    #main_results div#results.only_template_images {
+        #urls {
+            // 3-4 columns on tablet  
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+}
+
+// Desktop and ultra-wide  
+@media screen and (min-width: @tablet) {
+    #main_results div#results.only_template_images {
+        #urls {
+            // More columns on desktop, max width per image  
+            grid-template-columns: repeat(auto-fill, minmax(250px, 300px));
         }
     }
 }
@@ -383,65 +426,13 @@ input.checkbox-onoff[type="checkbox"]::before {
     transition: left 0.1s;
 }
 
-// --- 4. RESPONSIVE OVERRIDES (THE DEFINITIVE FIX) ---
-
-// This is the mixin that needs to be overridden.
-// By redefining it here, we ensure our stacking logic is used.
-.results-tablet() {
-    #main_results div#results {
-        grid-template:
-            "header" min-content
-            "corrections" min-content
-            "answers" min-content
-            "sidebar" min-content
-            "urls" 1fr
-            "pagination" min-content
-            / 100%;
-        margin-left: 0;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 0 0.5rem;
-    }
-
-    .search_filters,
-    #suggestions {
-        margin-left: 0.5rem;
-        width: auto;
-        max-width: calc(100vw - 1rem);
-    }
-
-    #categories {
-        overflow-x: auto;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        #categories_container {
-            width: max-content;
-        }
-    }
-
-    #backToTop {
-        display: none;
-    }
-}
-
-@media screen and (max-width: @tablet) {
-    .results-tablet();
-}
 
 @media screen and (max-width: @phone) {
     .autocomplete {
-        min-width: 100%;
-    }
-
-    #main_results div#results.only_template_images .result-images {
-        flex-basis: calc(50% - 0.5rem);
-        max-width: calc(50% - 0.5rem);
-        max-height: 40vh;
-        width: 45vw;
+        min-width: auto;
+        width: 100%;
+        max-width: @search-width;
+        height: auto;
     }
 
     #search_view:focus-within {
@@ -467,8 +458,17 @@ input.checkbox-onoff[type="checkbox"]::before {
             border-bottom: 1px solid var(--color-search-border);
             border-radius: 0;
             box-shadow: none;
-            padding: 0;
+            padding: 0 1rem;
         }
+    }
+
+    #search_view:focus-within>.search_box>.autocomplete.open {
+        width: 100%;
+        max-width: 100dvw;
+        border-radius: 0 0 25px 25px;
+        margin-top: -1px;
+        left: 0;
+        right: 0;
     }
 }
 

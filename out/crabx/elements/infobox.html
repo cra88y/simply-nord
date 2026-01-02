@@ -25,4 +25,24 @@
       </ul>
     </div>
   {%- endif -%}
+  {%- if infobox.relatedTopics -%}
+    <div class="relatedTopics">
+      {%- for topic in infobox.relatedTopics -%}
+        <div>
+          <h3><bdi>{{ topic.name }}</bdi></h3>
+          {%- for suggestion in topic.suggestions -%}
+            <form method="{{ method or 'POST' }}" action="{{ url_for('search') }}">
+              <input type="hidden" name="q" value="{{ suggestion }}">
+              <input type="hidden" name="time_range" value="{{ time_range }}">
+              <input type="hidden" name="language" value="{{ current_language }}">
+              <input type="hidden" name="safesearch" value="{{ safesearch }}">
+              <input type="hidden" name="theme" value="{{ theme }}">
+              {%- if timeout_limit -%}<input type="hidden" name="timeout_limit" value="{{ timeout_limit|e }}" >{%- endif -%}
+              <input type="submit" value="{{ suggestion }}">
+            </form>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </aside>
