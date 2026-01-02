@@ -1,8 +1,8 @@
 /* ==========================================================================
-   Simply-Nord Theme Overrides - FINAL (v6)
-   - Incorporates final review feedback for pixel-perfect accuracy.
-   - Fixes desktop suggestions alignment, scopes image grid correctly,
-     and resolves all remaining specificity and layout gaps.
+   Simply-Nord Theme Overrides - FINAL (v7)
+   - Definitive fixes for all layout, stacking, and alignment issues.
+   - Corrects suggestions alignment, video layout, image grid sizing,
+     and all remaining visual discrepancies.
    ========================================================================== */
 
 /* --- 1. Variable Definitions & Overrides --- */
@@ -32,8 +32,6 @@
 @results-offset: 10rem;
 @results-gap: 5rem;
 @search-width: 52rem;
-@results-image-row-height: auto;
-@results-image-row-height-phone: auto;
 @result-padding: 0.5rem 1rem;
 @results-margin: 0;
 
@@ -67,7 +65,7 @@ html {
 
 /* --- 3. Component Style Overrides --- */
 
-// General Rounded Aesthetic & Shadow (Fix #5)
+// General Rounded Aesthetic & Shadow
 .rounded-corners(@radius: 50px) {
     border-radius: @radius;
 }
@@ -162,7 +160,6 @@ button.category_button {
 
 .search_filters {
     margin-top: 0;
-    margin-left: @results-offset;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 
@@ -176,9 +173,10 @@ select {
     background-size: 1.5rem;
 }
 
-// Results Grid Layout
+// Results Grid Layout (Fix #1, #6)
 #results {
     margin-top: 0.125rem;
+    margin-left: @results-offset; // Apply offset to the entire grid container
     grid-template:
         "header sidebar" min-content
         "corrections sidebar" min-content
@@ -221,11 +219,12 @@ select {
     }
 }
 
+// Fix #3: Video result layout
 .result-videos {
     img.thumbnail {
-        float: right;
+        float: left !important; // Override general thumbnail float
+        margin: 0 1rem 0.5rem 0 !important;
         max-width: 35%;
-        margin: 0 0 0.5rem 1rem;
     }
 
     .content {
@@ -234,7 +233,6 @@ select {
     }
 }
 
-// Fix #7: Remove borders AND margins from specific result types
 .category-videos,
 .category-news,
 .category-map,
@@ -242,7 +240,7 @@ select {
 .category-files,
 .category-social {
     border: none !important;
-    margin: 0 0 1rem 0 !important; // Use standard bottom margin, remove side margins
+    margin: 0 0 1rem 0 !important;
 }
 
 .engines {
@@ -255,7 +253,7 @@ select {
     margin-top: 0.125rem;
 }
 
-// Image Results Page Layout (Fix #6)
+// Image Results Page Layout (Fix #4, #6)
 #main_results div#results.only_template_images {
     #urls {
         display: flex;
@@ -266,10 +264,9 @@ select {
 
     .result-images {
         padding: 0.25rem;
-        height: auto;
-        flex-basis: calc(50% - 0.5rem); // Two columns with gap
-        flex-grow: 1;
-        max-width: calc(50% - 0.5rem);
+        height: 40vh; // Max height constraint
+        flex-basis: calc(50% - 1rem); // Two columns with gap
+        max-width: calc(50% - 1rem);
 
         >a {
             display: flex;
@@ -281,7 +278,7 @@ select {
 
         img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: contain;
             border: none;
         }
@@ -298,9 +295,9 @@ select {
     }
 }
 
-// Suggestions (Fix #1)
+// Suggestions (Fix #1, #6)
 #suggestions {
-    margin-left: @results-offset; // Desktop alignment
+    margin-left: 0; // Remove offset from child, it's on the parent grid now
     width: @results-width;
 
     .wrapper {
@@ -357,6 +354,11 @@ select {
     margin-left: 0;
 }
 
+// Fix #5: Rounded response time bars
+.stacked-bar-chart>div {
+    border-radius: 50px;
+}
+
 // Home Page
 #main_index {
     margin-top: 33vh;
@@ -383,7 +385,7 @@ input.checkbox-onoff[type="checkbox"]::before {
         overflow-x: hidden;
     }
 
-    // Fix #3: Stack main content areas correctly
+    // Fix #2 & #3: Stack main content areas correctly
     #main_results div#results {
         grid-template:
             "header" min-content
@@ -396,14 +398,15 @@ input.checkbox-onoff[type="checkbox"]::before {
         margin-left: 0;
         width: 100%;
         box-sizing: border-box;
+        padding: 0 0.5rem; // Add side padding for content
     }
 
-    // Fix #2: Align filters and suggestions on tablet
+    // Fix #1 & #2: Align filters and suggestions on tablet
     .search_filters,
     #suggestions {
-        margin-left: 0.5rem;
+        margin-left: 0;
         width: auto;
-        max-width: calc(100vw - 1rem);
+        max-width: 100%;
     }
 
     #categories {
@@ -425,10 +428,12 @@ input.checkbox-onoff[type="checkbox"]::before {
         min-width: 100%;
     }
 
-    // Image results on phone: still two columns, but smaller
+    // Fix #4: Image results on phone
     #main_results div#results.only_template_images .result-images {
         flex-basis: calc(50% - 0.5rem);
         max-width: calc(50% - 0.5rem);
+        max-height: 40vh;
+        width: 45vw;
     }
 
     #search_view:focus-within {
