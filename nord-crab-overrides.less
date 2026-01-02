@@ -256,9 +256,6 @@ html {
         #results {
             margin-top: 0.5rem !important;
             margin-left: @results-offset !important;
-            width: 100% !important;
-            max-width: var(--results-container-width, 85rem) !important;
-            /* Constrain max width */
             padding: 0 !important;
             gap: 0 @results-gap !important;
             display: grid !important;
@@ -529,8 +526,10 @@ html {
     --color-answer-background: @nord5;
     --color-result-background: @nord6;
     --color-result-border: @nord4;
+    --color-result-description-highlight-font: @nord1;
     --color-result-url-font: @nord3;
     --color-result-link-font: @nord10;
+    --color-result-link-font-highlight: @nord7;
     --color-result-link-visited-font: @nord15;
     --color-result-publishdate-font: @nord2;
     --color-result-engines-font: @nord3;
@@ -579,8 +578,12 @@ html {
     --color-answer-background: @nord1;
     --color-result-background: @nord0;
     --color-result-border: @nord1;
+    --color-result-description-highlight-font: @nord13;
+    /* Nord Yellow */
     --color-result-url-font: @nord5;
     --color-result-link-font: @nord8;
+    --color-result-link-font-highlight: @nord13;
+    /* Nord Yellow */
     --color-result-link-visited-font: @nord12;
     --color-result-publishdate-font: var(--color-answer-font);
     --color-result-engines-font: @nord8;
