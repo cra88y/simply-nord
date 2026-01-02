@@ -1,8 +1,8 @@
 /* ==========================================================================
-   Simply-Nord Theme Overrides - FINAL (v4)
-   - Addresses all 15 points from the detailed review.
-   - Fixes suggestions, search bar rounding, mobile stacking, image layout,
-     and all other identified gaps. This is the production version.
+   Simply-Nord Theme Overrides - FINAL (v6)
+   - Incorporates final review feedback for pixel-perfect accuracy.
+   - Fixes desktop suggestions alignment, scopes image grid correctly,
+     and resolves all remaining specificity and layout gaps.
    ========================================================================== */
 
 /* --- 1. Variable Definitions & Overrides --- */
@@ -32,7 +32,7 @@
 @results-offset: 10rem;
 @results-gap: 5rem;
 @search-width: 52rem;
-@results-image-row-height: auto; // Let content define height
+@results-image-row-height: auto;
 @results-image-row-height-phone: auto;
 @result-padding: 0.5rem 1rem;
 @results-margin: 0;
@@ -62,12 +62,12 @@ html {
 
 #links_on_top {
     font-size: 1.25rem;
-    top: 1.4rem; // Fix #14: Align settings gear with search bar
+    top: 1.4rem;
 }
 
 /* --- 3. Component Style Overrides --- */
 
-// General Rounded Aesthetic
+// General Rounded Aesthetic & Shadow (Fix #5)
 .rounded-corners(@radius: 50px) {
     border-radius: @radius;
 }
@@ -80,7 +80,14 @@ html {
     border-radius: @radius;
 }
 
-// Search Header & Box (Fixes #1, #2, #3)
+.result img.thumbnail,
+.result-images img,
+#sidebar .infobox img {
+    border-radius: 25px;
+    box-shadow: var(--color-search-shadow);
+}
+
+// Search Header & Box
 #search_header {
     padding-top: 1rem;
     gap: 0.5rem;
@@ -89,7 +96,7 @@ html {
 
 .search_box {
     max-width: @search-width;
-    border-radius: 50px; // Fix #1
+    border-radius: 50px;
 }
 
 #q,
@@ -100,17 +107,17 @@ html {
 }
 
 #q {
-    border-radius: 50px 0 0 50px; // Fix #2
+    border-radius: 50px 0 0 50px;
 }
 
 #send_search {
     padding-right: 1.5rem;
-    border-radius: 0 50px 50px 0; // Fix #2
+    border-radius: 0 50px 50px 0;
 }
 
 #clear_search {
     width: 2rem;
-    padding: 0.8rem 0.2rem; // Fix #3
+    padding: 0.8rem 0.2rem;
 }
 
 // Autocomplete & Mobile Overlay
@@ -141,9 +148,9 @@ html {
     display: block;
 }
 
-// Categories & Filters (Fixes #6, #7, #8)
+// Categories & Filters
 button.category_button {
-    padding: 0.25rem 1rem; // Fix #7: Reduce vertical padding
+    padding: 0.25rem 1rem;
     text-transform: lowercase;
     font-size: 1rem;
 
@@ -155,7 +162,7 @@ button.category_button {
 
 .search_filters {
     margin-top: 0;
-    margin-left: @results-offset; // Fix #8: Align with results
+    margin-left: @results-offset;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 
@@ -185,11 +192,11 @@ select {
     grid-area: header;
 }
 
-// Result Cards (Fixes #5, #11, #13)
+// Result Cards
 .result {
     border-left-width: 0;
-    position: relative; // For engine positioning
-    padding-bottom: 1.5rem; // Space for engines
+    position: relative;
+    padding-bottom: 1.5rem;
 
     h3 {
         font-size: 1.125rem;
@@ -211,14 +218,10 @@ select {
         max-height: 10rem;
         height: auto;
         object-fit: contain;
-        box-shadow: var(--color-search-shadow);
-        border-radius: 25px; // Fix #5
     }
 }
 
 .result-videos {
-
-    // Fix #10
     img.thumbnail {
         float: right;
         max-width: 35%;
@@ -226,13 +229,23 @@ select {
     }
 
     .content {
-        display: block; // Allow content to wrap naturally
+        display: block;
         max-height: none;
     }
 }
 
+// Fix #7: Remove borders AND margins from specific result types
+.category-videos,
+.category-news,
+.category-map,
+.category-music,
+.category-files,
+.category-social {
+    border: none !important;
+    margin: 0 0 1rem 0 !important; // Use standard bottom margin, remove side margins
+}
+
 .engines {
-    // Fix #11
     position: absolute;
     bottom: 0.5rem;
     right: 1rem;
@@ -242,44 +255,52 @@ select {
     margin-top: 0.125rem;
 }
 
-// Image Results (Fixes #15)
-.result-images {
-    padding: 0.25rem;
-    max-width: 45%; // Two per row
-    height: 45vh; // Max height
-    flex-grow: 1;
-    display: flex;
-
-    >a {
+// Image Results Page Layout (Fix #6)
+#main_results div#results.only_template_images {
+    #urls {
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.5rem;
     }
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        border: none;
-        border-radius: 25px; // Fix #15
-    }
+    .result-images {
+        padding: 0.25rem;
+        height: auto;
+        flex-basis: calc(50% - 0.5rem); // Two columns with gap
+        flex-grow: 1;
+        max-width: calc(50% - 0.5rem);
 
-    .image_resolution,
-    span.title,
-    span.source {
-        position: static;
-        display: block;
-        width: 100%;
-        padding: 0.125rem 0 0 0;
-        flex-shrink: 0; // Prevent text from shrinking
+        >a {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border: none;
+        }
+
+        .image_resolution,
+        span.title,
+        span.source {
+            position: static;
+            display: block;
+            width: 100%;
+            padding: 0.125rem 0 0 0;
+            flex-shrink: 0;
+        }
     }
 }
 
-// Suggestions (Fix #8)
+// Suggestions (Fix #1)
 #suggestions {
-    margin-left: @results-offset;
+    margin-left: @results-offset; // Desktop alignment
     width: @results-width;
 
     .wrapper {
@@ -315,7 +336,7 @@ select {
     }
 }
 
-// Sidebar & Answers (Fix #12)
+// Sidebar & Answers
 #answers,
 #sidebar .infobox {
     background: var(--color-header-background);
@@ -324,12 +345,16 @@ select {
     border: none;
 }
 
-.sidebar-collapsible {
-    border: none; // Remove top border
+.sidebar-collapsible,
+#sidebar-end-collapsible {
+    border: none;
 }
 
-#sidebar-end-collapsible {
-    border: none; // Remove bottom border
+#sidebar .infobox .urls ul,
+#sidebar .infobox .urls li {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
 }
 
 // Home Page
@@ -352,16 +377,14 @@ input.checkbox-onoff[type="checkbox"]::before {
     transition: left 0.1s;
 }
 
-// Mobile & Tablet Overrides (Fixes #4, #6, #9)
+// Mobile & Tablet Overrides (Fix #2, #3)
 @media screen and (max-width: @tablet) {
-
-    // Fix #9: Prevent horizontal scroll on mobile
     body {
         overflow-x: hidden;
     }
 
+    // Fix #3: Stack main content areas correctly
     #main_results div#results {
-        // Fix #4: Stack main content areas
         grid-template:
             "header" min-content
             "corrections" min-content
@@ -369,20 +392,20 @@ input.checkbox-onoff[type="checkbox"]::before {
             "sidebar" min-content
             "urls" 1fr
             "pagination" min-content
-            / 100%; // Use full width
+            / 100%;
         margin-left: 0;
         width: 100%;
         box-sizing: border-box;
     }
 
+    // Fix #2: Align filters and suggestions on tablet
     .search_filters,
     #suggestions {
-        margin-left: 0.5rem; // Adjust left margin for smaller screens
+        margin-left: 0.5rem;
         width: auto;
-        max-width: 100vw;
+        max-width: calc(100vw - 1rem);
     }
 
-    // Fix #6: Ensure categories scroll horizontally
     #categories {
         overflow-x: auto;
         scrollbar-width: none;
@@ -402,9 +425,10 @@ input.checkbox-onoff[type="checkbox"]::before {
         min-width: 100%;
     }
 
-    .result-images {
-        width: 45vw; // Adjust image size for phone
-        height: auto;
+    // Image results on phone: still two columns, but smaller
+    #main_results div#results.only_template_images .result-images {
+        flex-basis: calc(50% - 0.5rem);
+        max-width: calc(50% - 0.5rem);
     }
 
     #search_view:focus-within {
