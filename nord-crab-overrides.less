@@ -109,9 +109,9 @@ html {
             @media screen and (max-width: 50em) {
                 margin: 0 !important;
                 padding: 0.5rem 0.5rem 0 0.5rem !important;
-                grid-template-areas: "logo search" "categories categories" !important;
+                flex-wrap: wrap !important;
+                /* Allow wrapping for mobile */
                 box-shadow: none !important;
-                /* Flat mobile */
             }
         }
 
@@ -204,8 +204,8 @@ html {
             @media screen and (max-width: 50em) {
                 margin-left: 0 !important;
                 padding: 0 0.5rem !important;
-                justify-content: center !important;
-                flex-wrap: wrap !important;
+                justify-content: flex-start !important;
+                /* Left align like results */
             }
         }
 
@@ -233,6 +233,7 @@ html {
                 form {
                     display: inline-flex !important;
                     flex: 0 0 auto !important;
+                    white-space: nowrap !important;
                     width: auto !important;
                     border-radius: 50px !important;
                     border: 0.125rem solid rgba(0, 0, 0, 0.1) !important;
@@ -265,12 +266,13 @@ html {
                 "answers sidebar" min-content
                 "urls sidebar" 1fr
                 "pagination sidebar" min-content
-                / @results-width @results-sidebar-width !important;
+                / 1fr @results-sidebar-width !important;
 
             @media screen and (max-width: 60em) {
-                /* Tablet Tier */
+                /* Tablet Tier - STACKED like mobile */
                 margin-left: 0.5rem !important;
-                grid-template-columns: 1fr @results-sidebar-width !important;
+                padding: 0 0.5rem !important;
+                grid-template: "header" "corrections" "answers" "sidebar" "urls" "pagination" / 100% !important;
             }
 
             @media screen and (max-width: 50em) {
@@ -287,6 +289,8 @@ html {
             margin-bottom: @results-margin !important;
             background: var(--color-result-background) !important;
             border-radius: 20px !important;
+            border: none !important;
+            /* No Border */
             box-shadow: none !important;
             display: grid !important;
             grid-template-areas:
@@ -305,7 +309,7 @@ html {
                 color: var(--color-result-url-font) !important;
                 margin-top: 0 !important;
                 margin-bottom: 0.1rem !important;
-                opacity: 0.7 !important;
+                opacity: 1 !important;
                 display: flex !important;
                 align-items: center !important;
                 flex-wrap: nowrap !important;
@@ -333,7 +337,6 @@ html {
                 display: block !important;
             }
 
-            .published_date,
             .result_author,
             .engines,
             .stat,
@@ -349,6 +352,14 @@ html {
                 margin: 0.5rem 0 0 0 !important;
                 /* Separation from content */
                 filter: none !important;
+            }
+
+            .published_date {
+                grid-area: content !important;
+                float: left !important;
+                margin-right: 0.5rem !important;
+                font-size: 0.9em !important;
+                color: var(--color-result-publishdate-font) !important;
             }
 
             .engines {
@@ -402,37 +413,55 @@ html {
                 margin: 1.5% !important;
             }
 
+            >a {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
             img {
+                order: 1 !important;
                 border-radius: 20px !important;
                 width: 100% !important;
-                height: @results-image-row-height !important;
-                object-fit: contain !important;
+                height: 12rem !important;
+                object-fit: cover !important;
+                margin-bottom: 0.25rem !important;
 
                 @media screen and (max-width: 50em) {
-                    height: auto !important;
-                    max-height: 12rem !important;
+                    height: 10rem !important;
                 }
             }
 
             .image_resolution {
+                order: 2 !important;
                 font-size: 0.75rem !important;
-                opacity: 0.6;
-                margin-top: 0.25rem !important;
+                /* Text visible */
+                color: var(--color-base-font) !important;
+                opacity: 0.7;
+                display: block !important;
+                margin: 0 !important;
             }
 
             span.title {
+                order: 3 !important;
                 font-size: 0.85rem !important;
                 margin-top: 0.1rem !important;
                 display: block !important;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                color: var(--color-base-font) !important;
+                font-weight: normal !important;
             }
 
             span.source {
-                font-size: 0.7rem !important;
-                opacity: 0.5;
+                order: 4 !important;
+                font-size: 0.75rem !important;
+                color: var(--color-result-url-font) !important;
+                opacity: 0.8;
                 display: block !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
@@ -456,6 +485,8 @@ html {
         #answers,
         .sidebar-collapsible {
             border-radius: 20px !important;
+            border: none !important;
+            /* No Border */
             background: var(--color-header-background) !important;
             padding: 1rem !important;
             margin-bottom: @results-margin !important;
@@ -578,12 +609,10 @@ html {
     --color-answer-background: @nord1;
     --color-result-background: @nord0;
     --color-result-border: @nord1;
-    --color-result-description-highlight-font: @nord13;
-    /* Nord Yellow */
+    --color-result-description-highlight-font: @nord6;
     --color-result-url-font: @nord5;
     --color-result-link-font: @nord8;
-    --color-result-link-font-highlight: @nord13;
-    /* Nord Yellow */
+    --color-result-link-font-highlight: @nord7;
     --color-result-link-visited-font: @nord12;
     --color-result-publishdate-font: var(--color-answer-font);
     --color-result-engines-font: @nord8;
