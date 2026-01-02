@@ -100,23 +100,30 @@ $BuiltStatic = Join-Path $TempBuild "searx\static\themes\simple"
 
 Write-Host "   Mapping assets to legacy paths..." -ForegroundColor Gray
 
-# CSS Mapping
-if (Test-Path (Join-Path $BuiltStatic "sxng-ltr.min.css")) {  
-    Copy-Item (Join-Path $BuiltStatic "sxng-ltr.min.css") (Join-Path $OutCss "searxng-ltr.min.css") -Force  # CORRECT NAME  
+# CSS Mapping  
+if (Test-Path (Join-Path $BuiltStatic "searxng-ltr.min.css")) {    
+    Copy-Item (Join-Path $BuiltStatic "searxng-ltr.min.css") (Join-Path $OutCss "searxng-ltr.min.css") -Force    
+}    
+if (Test-Path (Join-Path $BuiltStatic "searxng-rtl.min.css")) {    
+    Copy-Item (Join-Path $BuiltStatic "searxng-rtl.min.css") (Join-Path $OutCss "searxng-rtl.min.css") -Force    
 }  
-if (Test-Path (Join-Path $BuiltStatic "sxng-rtl.min.css")) {  
-    Copy-Item (Join-Path $BuiltStatic "sxng-rtl.min.css") (Join-Path $OutCss "searxng-rtl.min.css") -Force  
+  
+# JS Mapping  
+if (Test-Path (Join-Path $BuiltStatic "searxng.core.min.js")) {  
+    Copy-Item (Join-Path $BuiltStatic "searxng.core.min.js") (Join-Path $OutJs "searxng.core.min.js") -Force  
 }
-# Keep pygments/other CSS if they exist
-Get-ChildItem -Path $BuiltStatic -Filter "*.css" | ForEach-Object {
-    if ($_.Name -notmatch "sxng-") {
-        Copy-Item $_.FullName $OutCss -Force
-    }
-}
-
-# JS Mapping
-if (Test-Path (Join-Path $BuiltStatic "sxng-core.min.js")) {
-    Copy-Item (Join-Path $BuiltStatic "sxng-core.min.js") (Join-Path $OutJs "searxng.min.js") -Force
+Get-ChildItem -Path $BuiltStatic -Filter "*.css" | ForEach-Object {  
+    if ($_.Name -notmatch "searxng-") {  
+        Copy-Item $_.FullName $OutCss -Force  
+    }  
+}  
+  
+# Copy specific CSS files that might be missed  
+if (Test-Path (Join-Path $BuiltStatic "rss.min.css")) {  
+    Copy-Item (Join-Path $BuiltStatic "rss.min.css") (Join-Path $OutCss "rss.min.css") -Force  
+}  
+if (Test-Path (Join-Path $BuiltStatic "ol.min.css")) {  
+    Copy-Item (Join-Path $BuiltStatic "ol.min.css") (Join-Path $OutCss "ol.min.css") -Force  
 }
 
 # Copy chunks and other JS (Modern builds rely on these)
@@ -129,8 +136,8 @@ if (Test-Path (Join-Path $BuiltStatic "img")) {
     Copy-Item "$(Join-Path $BuiltStatic 'img')\*" $OutImg -Recurse -Force
 }
 
-Write-Host "`nBuild Successful!" -ForegroundColor Green
-Write-Host "Deployment Summary:" -ForegroundColor White
-Write-Host " - Templates: $OutCrabx"
-Write-Host " - CSS:       $OutCss/searxng.min.css"
-Write-Host " - JS:        $OutJs/searxng.min.js"
+Write-Host "`nBuild Successful!" -ForegroundColor Green  
+Write-Host "Deployment Summary:" -ForegroundColor White  
+Write-Host " - Templates: $OutCrabx"  
+Write-Host " - CSS:       $OutCss/searxng-ltr.min.css (or rtl)"  
+Write-Host " - JS:        $OutJs/searxng.core.min.js"
