@@ -1,8 +1,8 @@
 /* ==========================================================================
-   Simply-Nord Theme Overrides - FINAL (v7)
-   - Definitive fixes for all layout, stacking, and alignment issues.
-   - Corrects suggestions alignment, video layout, image grid sizing,
-     and all remaining visual discrepancies.
+   Simply-Nord Theme Overrides - FINAL (v8)
+   - Definitive version addressing all specificity and layout regressions.
+   - Correctly overrides responsive stacking by targeting the same context
+     as the base theme, eliminating the need for "!important".
    ========================================================================== */
 
 /* --- 1. Variable Definitions & Overrides --- */
@@ -34,6 +34,8 @@
 @search-width: 52rem;
 @result-padding: 0.5rem 1rem;
 @results-margin: 0;
+@phone: 50em;
+@tablet: 79.75em;
 
 /* --- 2. Visual Removals & Global Tweaks --- */
 footer,
@@ -173,10 +175,10 @@ select {
     background-size: 1.5rem;
 }
 
-// Results Grid Layout (Fix #1, #6)
+// Results Grid Layout
 #results {
     margin-top: 0.125rem;
-    margin-left: @results-offset; // Apply offset to the entire grid container
+    margin-left: @results-offset;
     grid-template:
         "header sidebar" min-content
         "corrections sidebar" min-content
@@ -219,10 +221,9 @@ select {
     }
 }
 
-// Fix #3: Video result layout
 .result-videos {
     img.thumbnail {
-        float: left !important; // Override general thumbnail float
+        float: left !important;
         margin: 0 1rem 0.5rem 0 !important;
         max-width: 35%;
     }
@@ -253,7 +254,7 @@ select {
     margin-top: 0.125rem;
 }
 
-// Image Results Page Layout (Fix #4, #6)
+// Image Results Page Layout
 #main_results div#results.only_template_images {
     #urls {
         display: flex;
@@ -264,8 +265,9 @@ select {
 
     .result-images {
         padding: 0.25rem;
-        height: 40vh; // Max height constraint
-        flex-basis: calc(50% - 1rem); // Two columns with gap
+        height: auto;
+        flex-basis: calc(50% - 1rem);
+        flex-grow: 1;
         max-width: calc(50% - 1rem);
 
         >a {
@@ -278,7 +280,7 @@ select {
 
         img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: contain;
             border: none;
         }
@@ -295,9 +297,9 @@ select {
     }
 }
 
-// Suggestions (Fix #1, #6)
+// Suggestions
 #suggestions {
-    margin-left: 0; // Remove offset from child, it's on the parent grid now
+    margin-left: 0;
     width: @results-width;
 
     .wrapper {
@@ -354,7 +356,7 @@ select {
     margin-left: 0;
 }
 
-// Fix #5: Rounded response time bars
+// Rounded response time bars
 .stacked-bar-chart>div {
     border-radius: 50px;
 }
@@ -379,13 +381,11 @@ input.checkbox-onoff[type="checkbox"]::before {
     transition: left 0.1s;
 }
 
-// Mobile & Tablet Overrides (Fix #2, #3)
-@media screen and (max-width: @tablet) {
-    body {
-        overflow-x: hidden;
-    }
+// --- 4. RESPONSIVE OVERRIDES (THE DEFINITIVE FIX) ---
 
-    // Fix #2 & #3: Stack main content areas correctly
+// This is the mixin that needs to be overridden.
+// By redefining it here, we ensure our stacking logic is used.
+.results-tablet() {
     #main_results div#results {
         grid-template:
             "header" min-content
@@ -398,15 +398,14 @@ input.checkbox-onoff[type="checkbox"]::before {
         margin-left: 0;
         width: 100%;
         box-sizing: border-box;
-        padding: 0 0.5rem; // Add side padding for content
+        padding: 0 0.5rem;
     }
 
-    // Fix #1 & #2: Align filters and suggestions on tablet
     .search_filters,
     #suggestions {
-        margin-left: 0;
+        margin-left: 0.5rem;
         width: auto;
-        max-width: 100%;
+        max-width: calc(100vw - 1rem);
     }
 
     #categories {
@@ -421,6 +420,10 @@ input.checkbox-onoff[type="checkbox"]::before {
             width: max-content;
         }
     }
+
+    #backToTop {
+        display: none;
+    }
 }
 
 @media screen and (max-width: @phone) {
@@ -428,7 +431,6 @@ input.checkbox-onoff[type="checkbox"]::before {
         min-width: 100%;
     }
 
-    // Fix #4: Image results on phone
     #main_results div#results.only_template_images .result-images {
         flex-basis: calc(50% - 0.5rem);
         max-width: calc(50% - 0.5rem);
