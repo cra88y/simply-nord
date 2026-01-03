@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 $TempBuild = "$env:TEMP\simply-nord-overlay-workdir"
 
 Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Simply-Nord: Strict Overlay Build" -ForegroundColor Cyan
+Write-Host "Simply-Nord" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
 
 # 0. Pre-Flight: Clean Workspace
@@ -30,7 +30,7 @@ Copy-Item "$VanillaPath\*" -Destination $TempBuild -Recurse -Force
 # 2. OVERLAY 1: Templates (Repo/crabx -> Workspace/searx/templates/simple)
 Write-Host "[2] Applying Template Overrides (CrabX)..." -ForegroundColor Cyan
 $TemplateTarget = "$TempBuild\searx\templates\simple"
-$TemplateSource = "$RepoPath\crabx"
+$TemplateSource = "$RepoPath\src\crabx"
 
 if (Test-Path $TemplateSource) {
     # We overwrite the vanilla templates with yours
@@ -43,7 +43,7 @@ if (Test-Path $TemplateSource) {
 # 3. OVERLAY 2: CSS Injection (Repo/overrides -> Workspace/style.less)
 Write-Host "[3] Applying CSS Overrides..." -ForegroundColor Cyan
 $LessFile = "$TempBuild\client\simple\src\less\style.less"
-$OverrideFile = "$RepoPath\nord-crab-overrides.less"
+$OverrideFile = "$RepoPath\src\nord-crab-overrides.less"
 
 if (Test-Path $LessFile) {
     if (Test-Path $OverrideFile) {
