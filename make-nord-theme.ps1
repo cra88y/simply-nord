@@ -40,7 +40,7 @@ if (Test-Path $TemplateSource) {
     Write-Warning "    No custom templates found at $TemplateSource. Using Vanilla templates only."
 }
 
-# 3. OVERLAY 2: CSS Injection (Repo/overrides -> Workspace/style.less)
+# 3. OVERLAY 2: CSS Injection (FIXED: Inject AFTER Mixins)
 Write-Host "[3] Applying CSS Overrides..." -ForegroundColor Cyan
 $LessFile = "$TempBuild\client\simple\src\less\style.less"
 $OverrideFile = "$RepoPath\src\nord-crab-overrides.less"
@@ -48,11 +48,22 @@ $OverrideFile = "$RepoPath\src\nord-crab-overrides.less"
 if (Test-Path $LessFile) {
     if (Test-Path $OverrideFile) {
         $OverrideContent = Get-Content $OverrideFile -Raw
-        # Append overrides to the end of the main style file
-        Add-Content -Path $LessFile -Value "`n/* --- NORD OVERRIDES START --- */`n"
-        Add-Content -Path $LessFile -Value $OverrideContent
-        Add-Content -Path $LessFile -Value "`n/* --- NORD OVERRIDES END --- */`n"
-        Write-Host "    Injected LESS overrides into source." -ForegroundColor Green
+        $StyleContent = Get-Content $LessFile -Raw
+        
+        # FIX: We must inject AFTER "mixins.less" so we can use vanilla mixins
+        # but BEFORE "toolkit.less" so we can override variables.
+        $InjectionPoint = '@import "mixins.less";'
+        
+        if ($StyleContent -match [regex]::Escape($InjectionPoint)) {
+            # Insert overrides immediately after mixins
+            $NewContent = $StyleContent -replace [regex]::Escape($InjectionPoint), "$InjectionPoint`n/* NORD START */`n$OverrideContent`n/* NORD END */"
+            Set-Content -Path $LessFile -Value $NewContent
+            Write-Host "    [Success] Injected LESS overrides after Mixins." -ForegroundColor Green
+        }
+        else {
+            Write-Warning "    [Warning] Could not find injection point. Appending to end."
+            Add-Content -Path $LessFile -Value "`n$OverrideContent"
+        }
     } else {
         Write-Error "    Override file missing: $OverrideFile"
     }
