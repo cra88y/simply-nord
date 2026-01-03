@@ -198,11 +198,11 @@ searxng-vanilla/
 node_modules/
 build_error.log
 
-.txt
+*.txt
 .gemini/
 .cursorignore
 .temp_build/
 less-archive/
 less-crab-nord/
 Compare-Nord-Context.ps1
-.diff
+*.diff
