@@ -3,8 +3,8 @@
 
 param(
     [string]$VanillaPath = "$PSScriptRoot\searxng-vanilla",
-    [string]$RepoPath = "c:\Users\cra88y\Dev\Repos\simply-nord",
-    [string]$OutputPath = "c:\Users\cra88y\Dev\Repos\simply-nord\out"
+    [string]$RepoPath = "$PSScriptRoot",
+    [string]$OutputPath = "$PSScriptRoot\out"
 )
 
 $ErrorActionPreference = "Stop"
@@ -20,38 +20,43 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 }
 
 # 1. Setup Build Environment
-$TempBuild = "c:\Users\cra88y\.gemini\temp_build_final"
+$TempBuild = "$PSScriptRoot\.temp_build"
+Write-Host "1. Cleaning temp environment ($TempBuild)..." -ForegroundColor Gray
 if (Test-Path $TempBuild) { Remove-Item $TempBuild -Recurse -Force }
 New-Item -ItemType Directory -Path $TempBuild -Force | Out-Null
 
 # 2. Start with Vanilla Base (Core SearXNG)
-Write-Host "1. Initializing with vanilla base..." -ForegroundColor Gray
-Get-ChildItem -Path $VanillaPath | ForEach-Object {
-    Copy-Item $_.FullName -Destination $TempBuild -Recurse -Force
-}
+Write-Host "2. Initializing with vanilla base..." -ForegroundColor Gray
+if (-not (Test-Path $VanillaPath)) { Write-Error "Vanilla path not found: $VanillaPath"; return }
+Copy-Item "$VanillaPath\*" -Destination $TempBuild -Recurse -Force
 
 # 3. Inject Overrides (@import strategy)
-Write-Host "2. Injecting Nord & Crab LESS overrides..." -ForegroundColor Cyan
+Write-Host "3. Injecting Nord & Crab LESS overrides..." -ForegroundColor Cyan
 $LessDest = Join-Path $TempBuild "client\simple\src\less"
-Copy-Item (Join-Path $RepoPath "nord-crab-overrides.less") $LessDest -Force
+$OverrideFile = Join-Path $RepoPath "nord-crab-overrides.less"
 
-# FIX: Inject into ENTRY POINTS (ltr and rtl) to ensure it loads LAST and wins specificity
-$EntryFiles = @("style-ltr.less", "style-rtl.less")
+if (Test-Path $OverrideFile) {
+    Copy-Item $OverrideFile $LessDest -Force
+    
+    # Inject into ENTRY POINTS (ltr and rtl) to ensure it loads LAST and wins specificity
+    $EntryFiles = @("style-ltr.less", "style-rtl.less", "style.less") # Added style.less just in case version differs
 
-foreach ($file in $EntryFiles) {
-    $filePath = Join-Path $LessDest $file
-    if (Test-Path $filePath) {
-        Add-Content $filePath "`n@import `"nord-crab-overrides.less`";"
-        Write-Host "   Injected import into $file" -ForegroundColor Gray
-    } else {
-        Write-Warning "   Could not find entry file: $file"
+    foreach ($file in $EntryFiles) {
+        $filePath = Join-Path $LessDest $file
+        if (Test-Path $filePath) {
+            Add-Content $filePath "`n@import `"nord-crab-overrides.less`";"
+            Write-Host "   Injected import into $file" -ForegroundColor Gray
+        }
     }
+} else {
+    Write-Warning "   Override file not found at $OverrideFile"
 }
 
 # 4. Apply Template Overrides (Repo CrabX -> Vanilla Templates)
-Write-Host "3. Merging templates (Repo crabx -> Vanilla templates)..." -ForegroundColor Green
+Write-Host "4. Merging templates (Repo crabx -> Vanilla templates)..." -ForegroundColor Green
 $TemplateDest = Join-Path $TempBuild "searx\templates\simple"
 $TemplateSource = Join-Path $RepoPath "crabx"
+
 if (Test-Path $TemplateSource) {
     Get-ChildItem -Path $TemplateSource | ForEach-Object {
         Copy-Item $_.FullName -Destination $TemplateDest -Recurse -Force
@@ -60,84 +65,85 @@ if (Test-Path $TemplateSource) {
     Write-Warning "   No custom templates found at $TemplateSource. Skipping template merge."
 }
 
-# 5. Build CSS
-Write-Host "4. Compiling LESS to CSS via Vite..." -ForegroundColor Yellow
+# 5. Build CSS via NPM/Vite
+Write-Host "5. Compiling LESS to CSS via Vite..." -ForegroundColor Yellow
 $ClientDir = Join-Path $TempBuild "client\simple"
 Push-Location $ClientDir
 try {
+    # Ensure dependencies are installed
     if (-not (Test-Path "node_modules")) {
         Write-Host "   Installing node dependencies..." -ForegroundColor Gray
-        npm install --quiet
+        npm install --quiet --no-audit --no-fund
     }
+    
+    # Run the build
+    Write-Host "   Running build script..." -ForegroundColor Gray
+    $env:NODE_ENV = "production"
     npm run build
 }
 catch {
     Write-Error "Build failed. Check the NPM output above."
 }
-finally { Pop-Location }
+finally { 
+    Pop-Location 
+    $env:NODE_ENV = $null
+}
 
-# 6. Export to /out/ with Legacy Path Mapping
-Write-Host "5. Exporting final build to $OutputPath..." -ForegroundColor Cyan
+# 6. Export to /out/ matching Docker Volume Structure
+Write-Host "6. Exporting final build to $OutputPath..." -ForegroundColor Cyan
 
 # Cleanup old out
 if (Test-Path $OutputPath) { Remove-Item $OutputPath -Recurse -Force }
-$OutCrabx = Join-Path $OutputPath "crabx"
-$OutCrabxStatic = Join-Path $OutputPath "crabx-static"
-$OutCss = Join-Path $OutCrabxStatic "css"
-$OutJs = Join-Path $OutCrabxStatic "js"
-$OutImg = Join-Path $OutCrabxStatic "img"
 
-New-Item -ItemType Directory -Path $OutCrabx -Force | Out-Null
+# Define Output Structure
+$OutTemplates = Join-Path $OutputPath "crabx"          # Maps to /searx/templates/simple
+$OutStatic    = Join-Path $OutputPath "crabx-static"   
+$OutCss       = Join-Path $OutStatic "css"             # Maps to /searx/static/themes/simple/css
+$OutJs        = Join-Path $OutStatic "js"              # Maps to /searx/static/themes/simple/js
+$OutImg       = Join-Path $OutStatic "img"
+
+New-Item -ItemType Directory -Path $OutTemplates -Force | Out-Null
 New-Item -ItemType Directory -Path $OutCss -Force | Out-Null
 New-Item -ItemType Directory -Path $OutJs -Force | Out-Null
 New-Item -ItemType Directory -Path $OutImg -Force | Out-Null
 
-# Copy finished templates
-Copy-Item "$TemplateDest\*" $OutCrabx -Recurse -Force
+# --- A. Export Templates ---
+Write-Host "   Exporting Templates..." -ForegroundColor Gray
+Copy-Item "$TemplateDest\*" $OutTemplates -Recurse -Force
 
-# Map New Assets to Legacy Names Used in base.html
-$BuiltStatic = Join-Path $TempBuild "searx\static\themes\simple"
+# --- B. Export Static Assets ---
+# Locate where the build dumped the files. 
+# Newer SearXNG puts them in searx/static/themes/simple/css OR just searx/static/themes/simple/
+$BuiltStaticBase = Join-Path $TempBuild "searx\static\themes\simple"
 
-Write-Host "   Mapping assets to legacy paths..." -ForegroundColor Gray
-
-# CSS Mapping  
-if (Test-Path (Join-Path $BuiltStatic "searxng-ltr.min.css")) {    
-    Copy-Item (Join-Path $BuiltStatic "searxng-ltr.min.css") (Join-Path $OutCss "searxng-ltr.min.css") -Force    
-}    
-if (Test-Path (Join-Path $BuiltStatic "searxng-rtl.min.css")) {    
-    Copy-Item (Join-Path $BuiltStatic "searxng-rtl.min.css") (Join-Path $OutCss "searxng-rtl.min.css") -Force    
-}  
-  
-# JS Mapping  
-if (Test-Path (Join-Path $BuiltStatic "searxng.core.min.js")) {  
-    Copy-Item (Join-Path $BuiltStatic "searxng.core.min.js") (Join-Path $OutJs "searxng.core.min.js") -Force  
-}
-Get-ChildItem -Path $BuiltStatic -Filter "*.css" | ForEach-Object {  
-    if ($_.Name -notmatch "searxng-") {  
-        Copy-Item $_.FullName $OutCss -Force  
-    }  
-}  
-  
-# Copy specific CSS files that might be missed  
-if (Test-Path (Join-Path $BuiltStatic "rss.min.css")) {  
-    Copy-Item (Join-Path $BuiltStatic "rss.min.css") (Join-Path $OutCss "rss.min.css") -Force  
-}  
-if (Test-Path (Join-Path $BuiltStatic "ol.min.css")) {  
-    Copy-Item (Join-Path $BuiltStatic "ol.min.css") (Join-Path $OutCss "ol.min.css") -Force  
+Write-Host "   Exporting CSS..." -ForegroundColor Gray
+# Strategy: Find ALL .css files in the build output (recursive) and flatten them into the output CSS folder
+# This handles both flat structures and css/ subfolder structures
+Get-ChildItem -Path $BuiltStaticBase -Filter "*.css" -Recurse | ForEach-Object {
+    Copy-Item $_.FullName -Destination $OutCss -Force
 }
 
-# Copy chunks and other JS (Modern builds rely on these)
-if (Test-Path (Join-Path $BuiltStatic "chunk")) {
-    Copy-Item (Join-Path $BuiltStatic "chunk") $OutJs -Recurse -Force
+Write-Host "   Exporting JS..." -ForegroundColor Gray
+Get-ChildItem -Path $BuiltStaticBase -Filter "*.js" -Recurse | ForEach-Object {
+    Copy-Item $_.FullName -Destination $OutJs -Force
 }
 
-# Image Mapping
-if (Test-Path (Join-Path $BuiltStatic "img")) {
-    Copy-Item "$(Join-Path $BuiltStatic 'img')\*" $OutImg -Recurse -Force
+Write-Host "   Exporting Images..." -ForegroundColor Gray
+$ImgSource = Join-Path $BuiltStaticBase "img"
+if (Test-Path $ImgSource) {
+    Copy-Item "$ImgSource\*" $OutImg -Recurse -Force
 }
 
-Write-Host "`nBuild Successful!" -ForegroundColor Green  
-Write-Host "Deployment Summary:" -ForegroundColor White  
-Write-Host " - Templates: $OutCrabx"  
-Write-Host " - CSS:       $OutCss/searxng-ltr.min.css (or rtl)"  
-Write-Host " - JS:        $OutJs/searxng.core.min.js"
+Write-Host "`nBuild Successful!" -ForegroundColor Green
+Write-Host "--------------------------------------------------" -ForegroundColor Gray
+Write-Host "Docker Volume Mapping Guide:" -ForegroundColor White
+Write-Host "1. Templates:" -ForegroundColor Yellow
+Write-Host "   Host: $OutTemplates"
+Write-Host "   Cont: /usr/local/searxng/searx/templates/simple"
+Write-Host "2. CSS:" -ForegroundColor Yellow
+Write-Host "   Host: $OutCss"
+Write-Host "   Cont: /usr/local/searxng/searx/static/themes/simple/css"
+Write-Host "3. JS (Recommended to Add):" -ForegroundColor Red
+Write-Host "   Host: $OutJs"
+Write-Host "   Cont: /usr/local/searxng/searx/static/themes/simple/js"
+Write-Host "--------------------------------------------------" -ForegroundColor Gray
